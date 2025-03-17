@@ -1,11 +1,11 @@
 const navTemplate = `
     <nav class="navigation">
         <ul>
-            <li><a href="/index.html">Home</a></li>
-            <li><a href="/search.html">Search</a></li>
-            <li><a href="/enter.html">Enter</a></li>
-            <li><a href="/share.html">Share</a></li>
-            <li><a href="/signin.html">Login/Sign Up</a></li>
+            <li><a href="/Recip-Ease/index.html">Home</a></li>
+            <li><a href="/Recip-Ease/search.html">Search</a></li>
+            <li><a href="/Recip-Ease/enter.html">Enter</a></li>
+            <li><a href="/Recip-Ease/share.html">Share</a></li>
+            <li><a href="/Recip-Ease/signin.html">Login/Sign Up</a></li>
         </ul>
     </nav>`;
 
