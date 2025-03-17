@@ -1,0 +1,241 @@
+#siteName {
+  color: #af8168;
+  font-family: "Rockwell Condensed", "Courier Bold", monospace;
+}
+.main-container {
+  background-color: #ede3dd;
+}
+h1,
+h2,
+h3,
+h4 {
+  color: #aa7529;
+}
+a {
+  color: #d9a760;
+}
+a:hover {
+  color: #aa7529;
+}
+.site-footer {
+  background-color: #8c805a;
+  color: #fff;
+}
+.navigation li {
+  background-color: #b3866f;
+}
+.navigation li a {
+  color: #634535;
+}
+.navigation li:hover,
+.navigation li:hover a {
+  background-color: #c19d8a;
+}
+.navigation li:hover a,
+.navigation li:hover a a {
+  color: #fff;
+}
+.navigation li:nth-child(1) {
+  background-color: #b3866f;
+}
+.navigation li:nth-child(2) {
+  background-color: #e0b77d;
+}
+.navigation li:nth-child(3) {
+  background-color: #9f936a;
+}
+.navigation li:nth-child(4) {
+  background-color: #e0b77d;
+}
+.navigation li:nth-child(5) {
+  background-color: #9f936a;
+}
+.blog-highlights {
+  border: 1px solid #d9a760;
+  background-color: #d2b9ab;
+}
+.blog-highlights h3,
+.blog-highlights .blog-item h4,
+.blog-highlights .recipe h3 {
+  color: #634535;
+}
+.blog-item a {
+  color: #aa7529;
+}
+.blog-item a:hover {
+  color: #d9a760;
+}
+.button-grid button,
+.ingredient-form button,
+.instructions-form button,
+.recipe-entry button,
+.recipe-entry submit,
+.closeout-buttons button {
+  background-color: #d9a760;
+  font-family: "Rockwell", "Courier Bold", monospace;
+  color: #81591f;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+.button-grid button:hover,
+.ingredient-form button:hover,
+.instructions-form button:hover,
+.recipe-entry button:hover,
+.recipe-entry submit:hover,
+.closeout-buttons button:hover {
+  background-color: #f2e0c7;
+}
+.ingredient-form,
+.instructions-form {
+  font-family: "Rockwell", "Courier Bold", monospace;
+  color: #81591f;
+}
+.ad-display {
+  border: 1px solid #8c805a;
+  background-color: #fff;
+}
+.recipe {
+  border: 1px solid #2f2b1e;
+  background-color: #c3bba2;
+}
+.recipe img {
+  width: 100%;
+  height: auto;
+}
+.recipe h3,
+.recipe p,
+.recipe a {
+  margin: 10px 0;
+}
+.recipe a {
+  color: #81591f;
+}
+.recipe-item {
+  margin-bottom: 10px;
+}
+.recipe-item h3 {
+  color: #d9a760;
+}
+.recipe-item a {
+  color: #a67358;
+}
+.recipe-entry,
+.closeout-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  align-items: center;
+}
+.recipe-entry form,
+.closeout-buttons form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  align-items: center;
+}
+.recipe-entry form label,
+.closeout-buttons form label {
+  margin-bottom: 5px;
+}
+.recipe-entry form input,
+.closeout-buttons form input,
+.recipe-entry form select,
+.closeout-buttons form select {
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 100%;
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.login-form button {
+  background-color: #d9a760;
+  font-family: "Rockwell", "Courier Bold", monospace;
+  color: #81591f;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin: 5px;
+}
+.login-form button:hover {
+  background-color: #f2e0c7;
+}
+.social-login {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 10px;
+}
+.social-login button {
+  width: 100%;
+  margin-top: 10px;
+}
+.social-login button:first-child {
+  margin-top: 0;
+}
+.search-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+.search-form form {
+  display: flex;
+  width: 100%;
+  max-width: 560px;
+}
+.search-form form input[type="text"] {
+  flex: 2;
+  margin-right: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+.search-form form button {
+  flex: 1;
+  padding: 8px 16px;
+  background-color: #d9a760;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.search-form form button:hover {
+  background-color: #e8c99e;
+}
+.search-results button {
+  background-color: #d9a760;
+}
+.search-results button:hover {
+  background-color: #e8c99e;
+}
+.login-form {
+  flex-direction: row;
+}
+.login-form input[type="email"],
+.login-form input[type="password"] {
+  margin-right: 5px;
+}
+.login-form button {
+  margin: 0 10px;
+}
+.closeout-buttons {
+  flex-direction: row;
+  justify-content: center;
+}
+.closeout-buttons button {
+  margin: 0 10px;
+}
+#cancel-button {
+  background-color: #e8c99e;
+}
+#cancel-button:hover {
+  background-color: #edd5b2;
+}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css2?family=Rockwell&display=swap" rel="stylesheet">
+    <title>Recip-Ease Enter Page</title>
+    <link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="stylesheet.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
+</head>
+<body>
+    <div class="main-container">
+        <div id="mediaQueryMessage"></div> 
+        <section class="leftCol">
+            <a href="/" title="Go to homepage">
+                <img src="/images/Recip-easeLogo.png" alt="Recip-ease Logo - Click to go to homepage" style="max-width: 100%;">
+            </a>
+            <div id="navigation-placeholder"></div>
+			<div id="button-grid-placeholder"></div>
+			<form class="ingredient-form">
+				<label for="quantity">Quantity:</label>
+				<input type="text" id="quantity" name="quantity" placeholder="Enter quantity">
+		
+				<div class="checkbox">
+					<input type="checkbox" id="divided" name="divided">
+					<label for="divided">Divided</label>
+				</div>
+		
+				<button type="submit">Submit Ingredient</button>
+			</form>
+			<form class="instructions-form">
+				<h4>Enter Instructions By Step</h4>
+				<textarea id="instructions" name="instructions" placeholder="Enter instructions for this step" rows="4"></textarea>
+				<button type="submit">Submit Step</button>
+				<button type="Cancel">Undo Last Submission</button>
+			</form>
+        </section>
+        <section class="centerCol">
+            <h1 id="siteName">Recip-Ease</h1>
+			<h2 id="tagline">Finally... an easy way to enter, save, recall and share your favorite recipes!</h2>
+			<div class="recipe-entry">
+				<form id="recipeForm">
+					<label for="recipeName">Recipe Name:</label>
+					<input type="text" id="recipeName" name="recipeName" placeholder="Enter recipe name">
+					
+					<label for="foodCategory">Food Category:</label>
+					<div id="foodCategoryDropdown"></div>
+			
+					<label for="dishType">Dish Type:</label>
+					<select id="dishType" name="dishType"></select>
+			
+					<button type="submit">Save Recipe Information</button>
+				</form>
+			</div>
+			<div class="slideshow-mockup">
+				<p>Ingredient List<br>Will be added programatically to populate from MongoDB</p>
+			</div>
+			<h2>Entered Ingredients</h2>
+			<div class="slideshow-mockup">
+				<p>Recipe Ingredients and Steps<br>Functionality will be added programatically on full website</p>
+			</div>
+			<div class="closeout-buttons">
+				<button id="cancel-button" type="submit">Clear Form</button>
+				<button type="submit">Save Recipe</button>
+			</div>
+        </section>
+        <section class="rightCol"> 
+            <div class="ad-display">
+                Ad Display 
+            </div>
+        </section>
+    </div>
+	<div id="footer-placeholder"></div>
+	<script src="templates.js"></script>
+	<script src="commonjs.js"></script>
+	<script src="enterPagejavascript.js"></script>	
+</body>
+</html>

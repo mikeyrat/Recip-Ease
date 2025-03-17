@@ -1,0 +1,272 @@
+@primary1Color: #a67358; 
+@primary2Color: #d9a760;
+@primary3Color: #8c805a;
+@whiteColor: #fff; 
+@greyColor: #ccc;
+@blackColor: #000;
+@lightenHeadline: 5%;
+@lightenNavigation: 7%;
+@lightenHover: 15%;
+@lightenBlog: 25%;
+@lightenBackground: 40%;
+@darkenText: 20%;
+@darkenBorder: 30%;
+@defaultFontCond: "Rockwell Condensed", "Courier Bold", monospace;
+@defaultFontNorm: "Rockwell", "Courier Bold", monospace;
+
+#siteName {
+    color: lighten(@primary1Color, @lightenHeadline);
+    font-family: @defaultFontCond;
+}
+
+.main-container {
+    background-color: lighten(@primary1Color, @lightenBackground);
+}
+
+h1, h2, h3, h4 {
+    color: darken(@primary2Color,@darkenText);
+}
+
+a {
+    color: @primary2Color;
+}
+
+a:hover {
+    color: darken(@primary2Color, @darkenText);
+}
+
+.site-footer {
+    background-color: @primary3Color;
+    color: @whiteColor;
+}
+
+.navigation li {
+    background-color: lighten(@primary1Color, @lightenNavigation);
+   
+    a {
+        color: darken(@primary1Color, @darkenText);
+    }
+
+    &:hover, &:hover a { 
+        background-color: lighten(@primary1Color, @lightenHover);
+        a {
+            color: #fff; 
+        }
+    }
+}
+
+.navigation {
+    li:nth-child(1) { background-color: lighten(@primary1Color, @lightenNavigation); }
+    li:nth-child(2) { background-color: lighten(@primary2Color, @lightenNavigation); }
+    li:nth-child(3) { background-color: lighten(@primary3Color, @lightenNavigation); }
+    li:nth-child(4) { background-color: lighten(@primary2Color, @lightenNavigation); }
+    li:nth-child(5) { background-color: lighten(@primary3Color, @lightenNavigation); }
+}
+
+.blog-highlights {  
+    border: 1px solid @primary2Color; 
+    background-color: lighten(@primary1Color, @lightenBlog);
+    
+    h3, .blog-item h4, .recipe h3 {
+        color: darken(@primary1Color, @darkenText); 
+    }
+}
+
+.blog-item a {
+    color: darken(@primary2Color, @darkenText);  
+}
+
+.blog-item a:hover {
+    color: @primary2Color;
+}
+
+.buttonStyle() {
+    background-color: @primary2Color;
+    font-family: @defaultFontNorm;
+    color: darken(@primary2Color,@darkenBorder);
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: lighten(@primary2Color, @lightenBlog);
+    }
+}
+
+.button-grid button, .ingredient-form button, .instructions-form button, .recipe-entry button, .recipe-entry submit, .closeout-buttons button {
+    .buttonStyle();
+}
+
+
+.ingredient-form, .instructions-form {
+    font-family: @defaultFontNorm;
+    color: darken(@primary2Color,@darkenBorder);
+}
+
+.ad-display {
+    border: 1px solid @primary3Color;
+    background-color: @whiteColor;
+}
+
+.recipe {
+    border: 1px solid darken(@primary3Color, @darkenBorder);
+    background-color: lighten(@primary3Color, @lightenBlog);
+
+    img {
+        width: 100%; 
+        height: auto;
+    }
+
+    h3, p, a {
+        margin: 10px 0; 
+    }
+
+    a {
+        color: darken(@primary2Color, @darkenBorder);
+    }
+}
+
+.recipe-item {
+    margin-bottom: 10px;
+    
+    h3 {
+    color: @primary2Color; 
+    }
+    a {
+    color:@primary1Color; 
+    }
+}
+
+
+.formElementStyles() {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    align-items: center;
+
+    label {
+        margin-bottom: 5px;
+    }
+
+    input, select {
+        margin-bottom: 10px;
+        padding: 8px;
+        width: 100%;
+    }
+}
+
+.recipe-entry, .closeout-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    align-items: center;
+
+    form {
+        .formElementStyles(); 
+    }
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    button {
+        .buttonStyle(); 
+        margin: 5px; 
+    }
+}
+
+.social-login {
+    margin-top: 10px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-top: 10px;
+
+    button {
+        width: 100%; 
+        margin-top: 10px; 
+    }
+
+    button:first-child {
+        margin-top: 0; 
+    }
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.search-form form {
+    display: flex;  
+    width: 100%; 
+    max-width: 560px;  
+
+    input[type="text"] {
+        flex: 2;  
+        margin-right: 10px;  
+        padding: 8px;
+        border: 1px solid @greyColor;
+    }
+
+    button {
+        flex: 1;
+        padding: 8px 16px;
+        background-color: @primary2Color;
+        color: white;
+        border: none;
+        cursor: pointer;
+
+        &:hover {
+            background-color: lighten(@primary2Color, @lightenHover);  
+        }
+    }
+}
+
+.search-results {
+    
+    button {
+        background-color: @primary2Color;
+    
+        &:hover {
+        background-color: lighten(@primary2Color, @lightenHover);
+        }
+    }
+}
+
+.login-form {
+    flex-direction: row; 
+
+    input[type="email"], input[type="password"] {
+        margin-right: 5px; 
+    }
+
+    button {
+        margin: 0 10px; 
+    }
+}
+
+.closeout-buttons {
+    flex-direction: row;  
+    justify-content: center;  
+    button {
+        margin: 0 10px; 
+    }
+}
+
+#cancel-button {
+    background-color: lighten(@primary2Color, @lightenHover);  
+
+    &:hover {
+        background-color: lighten(@primary2Color, @darkenText); 
+    }
+}
+
