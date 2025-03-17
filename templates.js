@@ -1,7 +1,7 @@
 const navTemplate = `
     <nav class="navigation">
         <ul>
-            <li><a href="/">Home</a></li>
+            <li><a href="/index.html">Home</a></li>
             <li><a href="/search.html">Search</a></li>
             <li><a href="/enter.html">Enter</a></li>
             <li><a href="/share.html">Share</a></li>
