@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var categoryData = {
         categories: [
             { value: "desserts", name: "Desserts" },
-            { value: "breakfast", name: "Breakfast" },
+            //{ value: "breakfast", name: "Breakfast" },
             { value: "appetizers", name: "Appetizers" },
-            { value: "salads", name: "Salads" },
+          //  { value: "salads", name: "Salads" },
             { value: "maincourses", name: "Main Courses" },
-            { value: "drinks", name: "Drinks" }
+         //   { value: "drinks", name: "Drinks" }
         ]
     };
 
@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             var dishes = {
                 desserts: ["Cake", "Pie", "Pudding", "Ice Cream", "Cookies", "Sweet Breads"],
-                breakfast: ["Pancakes", "Omelet", "Porridge", "Eggs", "Waffles", "Casseroles"],
+               // breakfast: ["Pancakes", "Omelet", "Porridge", "Eggs", "Waffles", "Casseroles"],
                 appetizers: ["Finger Foods", "Dips & Spreads",  "Wings & Things"],
-                salads: ["Potato Salad", "Macaroni Salad", "Caesar Salads", "Salads with Protien"],
-                maincourses: ["Roast Beef", "Chicken Dishes", "Dinner Casseroles", "On The Grill", "Pork"],
-                drinks: ["After Dinner", "Margaritas", "Cocktails", "Martinis"]
+              //  salads: ["Potato Salad", "Macaroni Salad", "Caesar Salads", "Salads with Protien"],
+                maincourses: ["Beef", "Chicken", "Casseroles", "Soups", "Pork", "Vegetarian"],
+              //  drinks: ["After Dinner", "Margaritas", "Cocktails", "Martinis"]
             };
 
             if (dishes[category]) {
