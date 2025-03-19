@@ -22,11 +22,11 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     var categoryData = {
         categories: [
-            { value: "desserts", name: "Desserts" },
+            { value: "dessert_ingredients", name: "Desserts" },
             //{ value: "breakfast", name: "Breakfast" },
-            { value: "appetizers", name: "Appetizers" },
+            { value: "appetizer_ingredients", name: "Appetizers" },
           //  { value: "salads", name: "Salads" },
-            { value: "maincourses", name: "Main Courses" },
+            { value: "main_course_ingredients", name: "Main Courses" },
          //   { value: "drinks", name: "Drinks" }
         ]
     };
