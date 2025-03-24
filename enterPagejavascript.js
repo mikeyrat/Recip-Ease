@@ -22,12 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     var categoryData = {
         categories: [
-            { value: "desserts", name: "Desserts" },
-            { value: "breakfast", name: "Breakfast" },
-            { value: "appetizers", name: "Appetizers" },
-            { value: "salads", name: "Salads" },
-            { value: "maincourses", name: "Main Courses" },
-            { value: "drinks", name: "Drinks" }
+            { value: "dessert_ingredients", name: "Desserts" },
+            { value: "appetizer_ingredients", name: "Appetizers" },
+            { value: "main_course_ingredients", name: "Main Courses" },
         ]
     };
 
@@ -43,13 +40,28 @@ document.addEventListener('DOMContentLoaded', function() {
             dishTypeSelect.innerHTML = ''; 
 
             var dishes = {
-                desserts: ["Cake", "Pie", "Pudding", "Ice Cream", "Cookies", "Sweet Breads"],
-                breakfast: ["Pancakes", "Omelet", "Porridge", "Eggs", "Waffles", "Casseroles"],
-                appetizers: ["Bruschetta", "Falafel", "Caprese Salad", "Wings", "Cheese Sticks", "Potato Skins"],
-                salads: ["Potato Salad", "Macaroni Salad", "Caesar Salads", "Salads with Protien"],
-                maincourses: ["Roast Beef", "Chicken Dishes", "Dinner Casseroles", "On The Grill", "Pork"],
-                drinks: ["After Dinner", "Margaritas", "Cocktails", "Martinis"]
-            };
+            desserts: [
+                { value: "cake", name: "Cake" },
+                { value: "pie", name: "Pie" },
+                { value: "pudding", name: "Pudding" },
+                { value: "icecream", name: "Ice Cream" },
+                { value: "cookies", name: "Cookies" },
+                { value: "sweetbreads", name: "Sweet Breads" }
+            ],
+            appetizers: [
+                { value: "fingerfoods", name: "Finger Foods" },
+                { value: "dips", name: "Dips & Spreads" },
+                { value: "wings", name: "Wings & Things" }
+            ],
+            maincourses: [
+                { value: "beef", name: "Beef" },
+                { value: "chicken", name: "Chicken" },
+                { value: "casseroles", name: "Casseroles" },
+                { value: "soups", name: "Soups" },
+                { value: "pork", name: "Pork" },
+                { value: "vegetarian", name: "Vegetarian" }
+            ]
+        };
 
             if (dishes[category]) {
                 dishes[category].forEach(function(dish) {
