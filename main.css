@@ -1,444 +1,441 @@
 @charset "utf-8";
 /* CSS Document */
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .main-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
-    max-width: 1100px;
-    margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 div#mediaQueryMessage {
-    display: none;
-    width: 100%;
-    text-align: center;
-    margin: 10px 0;
+  display: none;
+  width: 100%;
+  text-align: center;
+  margin: 10px 0;
 }
 
 section {
-    padding: 10px;
+  padding: 10px;
 }
 
 a:focus {
-    outline: 2px dashed #1a73e8;
+  outline: 2px dashed #1a73e8;
 }
 
-section.leftCol, section.centerCol, section.rightCol {
-    flex: 1 1 auto;
+section.leftCol,
+section.centerCol,
+section.rightCol {
+  flex: 1 1 auto;
 }
 
 section.leftCol {
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    justify-content: flex-start; 
-    width: 200px; 
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 200px;
 }
 
 section.leftCol a {
-    width: 100%; 
-    display: flex;
-    justify-content: center; 
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 section.leftCol img {
-    max-width: 100%; 
-    height: auto;
+  max-width: 100%;
+  height: auto;
 }
 
 .section.centerCol {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .navigation ul {
-    list-style-type: none;
-    width: 200px; 
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column; 
-    align-items: center; 
+  list-style-type: none;
+  width: 200px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .navigation li {
-    width: 100%; 
-    padding: 8px;
-    margin-bottom: 4px;
-    text-align: center; 
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 4px;
+  text-align: center;
 }
 
 .navigation a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 #siteName {
-    font-weight: bold;
-    font-size: 84px;
-    text-align: center;
-    
+  font-weight: bold;
+  font-size: 84px;
+  text-align: center;
 }
 
 #tagline {
-    text-align: center;
+  text-align: center;
 }
 
 .login-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
-.login-form input[type="email"], .login-form input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    box-sizing: border-box;
+.login-form input[type="email"],
+.login-form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  box-sizing: border-box;
 }
 
-.login-button-container { 
-    display: flex;
-    flex-direction: row; 
-    justify-content: center; 
-    width: 100%;
-    margin-top: 10px; 
+.login-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
 
-    button {
-        margin: 0 10px; 
-    }
+  button {
+    margin: 0 10px;
+  }
 }
 
 .search-form {
-    display: flex;  
-    align-items: center; 
-    justify-content: center; 
-    margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .search-form form {
-    width: 100%; 
-    max-width: 560px; 
+  width: 100%;
+  max-width: 560px;
 }
 
 .search-form input[type="text"] {
-    flex-grow: 1; 
-    margin-right: 10px; 
-    padding: 8px; 
-    border: 1px solid #ccc; 
+  flex-grow: 1;
+  margin-right: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
 }
 
 .search-results {
-    margin-top: 20px;
-    max-height: 400px; 
-    overflow-y: auto; 
-    border: 1px solid #ccc; 
-    padding: 10px;
+  margin-top: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
 }
 
 .search-results ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .search-results li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #f0f0f0; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .search-results li:nth-child(odd) {
-    background-color: #ffffff; 
+  background-color: #ffffff;
 }
 
 .search-results li:nth-child(even) {
-    background-color: rgba(215, 166, 120, 0.2); 
+  background-color: rgba(215, 166, 120, 0.2);
 }
 
 .search-results h3 {
-    margin: 0;
-    flex-grow: 1;
+  margin: 0;
+  flex-grow: 1;
 }
 
 .search-results button {
-    margin-left: 10px;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  margin-left: 10px;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-
 .social-login button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    background: #f1f1f1; 
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: #f1f1f1;
 }
 
 .social-login button:first-child {
-    background: #3b5998; /* Facebook color */
-    color: white;
+  background: #3b5998; /* Facebook color */
+  color: white;
 }
 
 .social-login button:last-child {
-    background: #db4437; /* Google color */
-    color: white;
+  background: #db4437; /* Google color */
+  color: white;
 }
 
 .slideshow-mockup {
-    width: 100%;  
-    height: 450px;
-    background-color: #f4f4f4; 
-    color: #333; 
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    text-align: center;
-    margin: 20px 0; 
-    border: 1px dashed #cccccc; 
+  width: 100%;
+  height: 450px;
+  background-color: #b5a082a1;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  border: 1px dashed #cccccc;
+  padding: 10px;
 }
 
 .section.centerCol {
-    width: 560px; 
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
+  width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-
 .blog-highlights {
-    width: 200px;  
-    margin-top: 20px;   
-    padding: 10px;  
-    box-sizing: border-box;  
+  width: 200px;
+  margin-top: 20px;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .blog-highlights h3 {
-    text-align: center;  
-    margin-bottom: 15px;  
+  text-align: center;
+  margin-bottom: 15px;
 }
 
 .blog-item {
-    margin-bottom: 10px;  
+  margin-bottom: 10px;
 }
 
 .blog-item h4 {
-    margin: 0 0 5px 0;  
+  margin: 0 0 5px 0;
 }
 
 .blog-item p {
-    font-size: 0.9em;  
-    margin: 0 0 10px 0; 
+  font-size: 0.9em;
+  margin: 0 0 10px 0;
 }
 
 .blog-item a {
-    text-decoration: none;   
-    font-weight: bold;  
+  text-decoration: none;
+  font-weight: bold;
 }
 
 .button-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    grid-gap: 10px; 
-    padding: 20px; 
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  padding: 20px;
 }
 
 .button-grid button {
-    border: none;
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .ingredient-form {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; 
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .ingredient-form label {
-    margin-bottom: 5px; 
+  margin-bottom: 5px;
 }
 
 .ingredient-form input[type="text"] {
-    width: 100%; 
-    padding: 8px;
-    margin-bottom: 10px; 
-    box-sizing: border-box; 
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
 }
 
 .ingredient-form .checkbox {
-    margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 
 .ingredient-form button {
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .instructions-form {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
 }
 
 .instructions-form textarea {
-    width: 100%; 
-    height: 200px; 
-    padding: 8px;
-    box-sizing: border-box; 
-    resize: vertical; 
-    background-color: #f4f4f4; 
-    border: 1px solid #ccc; 
+  width: 100%;
+  height: 200px;
+  padding: 8px;
+  box-sizing: border-box;
+  resize: vertical;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
 }
 
 .instructions-form textarea::placeholder {
-    color: #888; 
+  color: #888;
 }
 
 .instructions-form button {
-    padding: 10px 15px;
-    margin-top: 10px; 
-    border: none;
-    cursor: pointer;
+  padding: 10px 15px;
+  margin-top: 10px;
+  border: none;
+  cursor: pointer;
 }
 
-
 .ad-display {
-    width: 100%;
-    height: 600px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
+  width: 100%;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
 }
 
 .rightCol .ad-display {
-    margin-top: 300px; 
+  margin-top: 300px;
 }
 
 .featured-recipes {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 20px;
 }
 
 .recipe {
-    flex: 0 48%; 
-    padding: 10px;
-    box-sizing: border-box;
-    margin-bottom: 20px; 
+  flex: 0 48%;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
 }
 
 .recipe img {
-    width: 100%; 
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 
-.recipe h3, .recipe p, .recipe a {
-    margin: 10px 0; 
+.recipe h3,
+.recipe p,
+.recipe a {
+  margin: 10px 0;
 }
 
 .recipe a {
-    text-decoration: none;
-    font-weight: bold;
-    display: block; 
-    outline: none; 
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+  outline: none;
 }
 
 .site-footer {
-    width: 100%;
-    text-align: center;
-    padding: 20px 10px;
-    box-sizing: border-box;
-    max-width: 1100px;
-    margin: 0 auto; 
-    display: flex;
-    flex-direction: column; 
-    align-items: center; 
+  width: 100%;
+  text-align: center;
+  padding: 20px 10px;
+  box-sizing: border-box;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .site-footer nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0; 
-    display: flex;
-    justify-content: center; 
-    flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .site-footer nav ul li {
-    padding: 0 15px;
+  padding: 0 15px;
 }
 
 .site-footer nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 @media all and (min-width: 800px) {
-    div#mediaQueryMessage {
-        display: block;
-    }
-    section.leftCol {
-        flex: 0 0 20.41%;
-    }
-    section.centerCol {
-        flex: 0 0 57.14%;
-    }
-    section.rightCol {
-        flex: 0 0 14.29%;
-    }
+  div#mediaQueryMessage {
+    display: block;
+  }
+  section.leftCol {
+    flex: 0 0 20.41%;
+  }
+  section.centerCol {
+    flex: 0 0 57.14%;
+  }
+  section.rightCol {
+    flex: 0 0 14.29%;
+  }
 }
 
 @media (max-width: 640px) {
-    #siteName {
-        display: none;  
-    }
+  #siteName {
+    display: none;
+  }
 }
 
 @media (max-width: 720px) {
-    .rightCol .ad-display {
-        margin-top: 0; 
-    }
+  .rightCol .ad-display {
+    margin-top: 0;
+  }
 }
 
 @media (max-width: 480px) {
-    .recipe {
-        flex: 0 100%; 
-    }
+  .recipe {
+    flex: 0 100%;
+  }
 
-    .site-footer nav ul {
-        flex-direction: column;
-    }
+  .site-footer nav ul {
+    flex-direction: column;
+  }
 
-    .site-footer nav ul li {
-        padding: 5px 0;
-    }
+  .site-footer nav ul li {
+    padding: 5px 0;
+  }
 }
-
-
-
-
