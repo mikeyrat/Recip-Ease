@@ -19,6 +19,9 @@
 
   align-items: center;
 }
+.slider .item {
+  transition: transform 1s ease, opacity 0.5s ease;
+}
 #next,
 #prev {
   position: absolute;

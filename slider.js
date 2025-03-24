@@ -82,3 +82,7 @@ prev.onclick = function () {
   active = active - 1 >= 0 ? active - 1 : active;
   loadShow();
 };
+setInterval(() => {
+  active = active + 1 < items.length ? active + 1 : 0;
+  loadShow();
+}, 2500);
