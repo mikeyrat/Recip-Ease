@@ -1,0 +1,94 @@
+[
+{
+  "_id": 6, 
+  "user_id": 1, 
+  "name": "Beef Stroganoff", 
+  "category": "Main Courses", 
+  "type": "Beef", 
+  "ingredients": {
+    "Beef sirloin": { "quantity": 1, "unit": "Lbs." },
+    "Salt": { "quantity": 1, "unit": "TSP" },
+    "Black pepper": { "quantity": 0.5, "unit": "TSP" },
+    "Butter": { "quantity": 2, "unit": "TBSP" },
+    "Onions": { "quantity": 1, "unit": "Cup" },
+    "Garlic": { "quantity": 2, "unit": "Qty" },
+    "Mushrooms": { "quantity": 1, "unit": "Cup" },
+    "Beef broth": { "quantity": 1, "unit": "Cup" },
+    "Sour cream": { "quantity": 0.5, "unit": "Cup" },
+    "Dijon mustard": { "quantity": 1, "unit": "TSP" },
+    "Egg noodles": { "quantity": 12, "unit": "Oz." }
+  },
+  "instructions": [
+    "Slice beef into thin strips and season with salt and black pepper.",
+    "Heat butter in a skillet and sauté onions, garlic, and mushrooms until tender.",
+    "Add beef and cook until browned.",
+    "Pour in beef broth and simmer for 10 minutes.",
+    "Stir in sour cream and Dijon mustard, cooking until sauce is creamy.",
+    "Serve over cooked egg noodles."
+  ],
+  "created_at": "2025-03-18T13:30:00Z",
+  "updated_at": "2025-03-18T13:35:00Z"
+},
+{
+  "_id": 7, 
+  "user_id": 1, 
+  "name": "Garlic Butter Roasted Chicken", 
+  "category": "Main Courses", 
+  "type": "Chicken", 
+  "ingredients": {
+    "Whole chicken": { "quantity": 1, "unit": "Qty" },
+    "Butter": { "quantity": 4, "unit": "TBSP" },
+    "Garlic": { "quantity": 4, "unit": "Qty" },
+    "Lemon juice": { "quantity": 2, "unit": "TBSP" },
+    "Salt": { "quantity": 1, "unit": "TSP" },
+    "Black pepper": { "quantity": 0.5, "unit": "TSP" },
+    "Thyme": { "quantity": 1, "unit": "TSP" },
+    "Rosemary": { "quantity": 1, "unit": "TSP" },
+    "Carrots": { "quantity": 2, "unit": "Qty" },
+    "Potatoes": { "quantity": 3, "unit": "Qty" },
+    "Onions": { "quantity": 1, "unit": "Qty" }
+  },
+  "instructions": [
+    "Preheat oven to 375°F (190°C).",
+    "Melt butter and mix with minced garlic, lemon juice, salt, black pepper, thyme, and rosemary.",
+    "Rub butter mixture over the chicken and place in a roasting pan.",
+    "Surround chicken with chopped carrots, potatoes, and onions.",
+    "Roast for 1 hour and 15 minutes, or until internal temperature reaches 165°F.",
+    "Let rest for 10 minutes before slicing and serving."
+  ],
+  "created_at": "2025-03-18T13:40:00Z",
+  "updated_at": "2025-03-18T13:45:00Z"
+},
+{
+  "_id": 8, 
+  "user_id": 1, 
+  "name": "Classic Chicken Noodle Soup", 
+  "category": "Main Courses", 
+  "type": "Soups", 
+  "ingredients": {
+    "Chicken breast": { "quantity": 1, "unit": "Lbs." },
+    "Olive oil": { "quantity": 1, "unit": "TBSP" },
+    "Onions": { "quantity": 1, "unit": "Cup" },
+    "Garlic": { "quantity": 2, "unit": "Qty" },
+    "Carrots": { "quantity": 2, "unit": "Qty" },
+    "Celery": { "quantity": 2, "unit": "Qty" },
+    "Chicken broth": { "quantity": 6, "unit": "Cup" },
+    "Egg noodles": { "quantity": 8, "unit": "Oz." },
+    "Salt": { "quantity": 1, "unit": "TSP" },
+    "Black pepper": { "quantity": 0.5, "unit": "TSP" },
+    "Thyme": { "quantity": 1, "unit": "TSP" },
+    "Parsley": { "quantity": 1, "unit": "TSP" }
+  },
+  "instructions": [
+    "Heat olive oil in a large pot and sauté onions, garlic, carrots, and celery until softened.",
+    "Add chicken breast and pour in chicken broth.",
+    "Season with salt, black pepper, and thyme.",
+    "Bring to a boil, then reduce heat and simmer for 20 minutes.",
+    "Remove chicken, shred it, and return it to the pot.",
+    "Add egg noodles and cook until tender.",
+    "Stir in parsley before serving."
+  ],
+  "created_at": "2025-03-18T13:50:00Z",
+  "updated_at": "2025-03-18T13:55:00Z"
+}
+]
