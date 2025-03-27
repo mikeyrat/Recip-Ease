@@ -1,92 +1,93 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('login-form');
+document.addEventListener('DOMContentLoaded', () => { // this mess is for the signin page. And I thought it would be my easiest page LOL!
+    const loginForm = document.getElementById('login-form'); //call these forms to the webpage when it renders
     const messageBox = document.getElementById('login-message');
 
-    loginForm.addEventListener('submit', async (e) => {
+    loginForm.addEventListener('submit', async (e) => { // wait for the user to put in username and pass and hit submit
         e.preventDefault();
 
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
 
-        try {
+        try { // cuz this page had a lot of errors with timing and other stupid stuff and I had to do some trapping
             
-            const loginResponse = await fetch('http://localhost:3000/api/users/login', {
+            const loginResponse = await fetch('http://localhost:3000/api/users/login', { //send username and pass
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
             });
 
-            const loginData = await loginResponse.json();
+            const loginData = await loginResponse.json(); //wait for response
 
-            if (!loginResponse.ok || !loginData.userId) {
+            if (!loginResponse.ok || !loginData.userId) { // no match for both, start over chump
                 messageBox.innerHTML = `<p style="color: red;">Login failed: ${loginData.error || 'Invalid credentials'}</p>`;
                 
                 return;
             }
             
-            const userId = loginData.userId;
-            localStorage.setItem('userId', userId);
+            const userId = loginData.userId; // the above returns the users document id
+            localStorage.setItem('userId', userId); // store that for later use all over the site
 
-            const userResponse = await fetch(`http://localhost:3000/api/users/${userId}`);
+            const userResponse = await fetch(`http://localhost:3000/api/users/${userId}`); // go back with the userdi and grab the username
             const userData = await userResponse.json();
 
-            if (!userResponse.ok || !userData.firstName) {
+            if (!userResponse.ok || !userData.firstName) { // when login failed, we can't get first name (this code not used much due to other checks)
                 messageBox.innerHTML = `<p style="color: red;">Login failed: Could not load user info.</p>`;
                 return;
             }    
-            messageBox.innerHTML = `
-            <div class="ui-message success">
+            // if it all works, show a welcome message with the user's first name
+            messageBox.innerHTML = ` 
+            <div class="ui-message success"> 
                 Welcome ${userData.firstName}!
                 
-            </div>
+            </div> 
             
         `;
-            document.getElementById('username').value = '';
+            document.getElementById('username').value = ''; // clear the username and password
             document.getElementById('password').value = '';
 
             document.getElementById('view-account').disabled = false;
             document.getElementById('change-credentials').disabled = false;
             document.getElementById('logout-container').style.display = 'flex';
 
-        } catch (err) {
+        } catch (err) { // trap errors like node.js not responding
             console.error("Login error:", err);
             messageBox.innerHTML = `<p style="color: red;">Server error. Please try again later.</p>`;
         }
     });
-
-    document.getElementById('show-signup').addEventListener('click', () => {
+ 
+    document.getElementById('show-signup').addEventListener('click', () => {  // code for displaying the signup form if "Sign Up" clicked
         const html = Mustache.render(signupTemplate, {});
         const signupPanel = document.getElementById('signup-panel');
     
         signupPanel.innerHTML = html;
         signupPanel.style.display = 'block';
-        document.getElementById('account-action-panel').style.display = 'none';
+        document.getElementById('account-action-panel').style.display = 'none'; //change visibility 
     
         setTimeout(() => {
             const signupForm = document.getElementById('signup-form');
             if (!signupForm) {
-                console.error("Signup form not found after rendering.");
+                console.error("Signup form not found after rendering AARRGG!!."); // had some timing issues where the form would show, but not be "rendered" in the code, making the form useless
                 return;
             }
 
-            document.querySelector('.cancel-signup').addEventListener('click', () => {
+            document.querySelector('.cancel-signup').addEventListener('click', () => { // user cancels sign up
                 document.getElementById('signup-panel').style.display = 'none';
-                document.getElementById('signup-panel').innerHTML = ''; // clear it out (optional)
+                document.getElementById('signup-panel').innerHTML = ''; // clear it out if cancelled
             });
-            console.log("Signup form found. Binding submit handler...");
+            
     
             signupForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                console.log("Signup form submitted");
+                console.log("Signup form submitted"); // troubleshooting console log. Not relevant to operation.
     
-                const firstName = document.getElementById('signup-first').value.trim();
+                const firstName = document.getElementById('signup-first').value.trim(); //Grab user particulars
                 const lastName = document.getElementById('signup-last').value.trim();
                 const username = document.getElementById('signup-username').value.trim();
                 const email = document.getElementById('signup-email').value.trim();
                 const password = document.getElementById('signup-password').value;
                 const passwordConfirm = document.getElementById('signup-password-confirm').value;
 
-                if (password !== passwordConfirm) {
+                if (password !== passwordConfirm) { // make sure passwords match
                     document.getElementById('signup-message').innerHTML = `
                         <p style="color: red;">Passwords do not match. Please try again.</p>
                     `;
@@ -94,35 +95,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
     
                 try {
-                    const response = await fetch('http://localhost:3000/api/users/register', {
+                    const response = await fetch('http://localhost:3000/api/users/register', { // if all good, add user to collection
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ username, email, password, firstName, lastName })
                     });
     
                     const data = await response.json();
-                    const messageBox = document.getElementById('signup-message');
+                    const messageBox = document.getElementById('signup-message'); // display acknowledgement
     
                     if (response.ok) {
                         messageBox.innerHTML = `<p style="color: green;">Account created successfully. You may now log in.</p>`;
                     
-                        setTimeout(() => {
+                        setTimeout(() => { // wait 2 seconds and then change visibility
                             const panel = document.getElementById('signup-panel');
                             panel.style.display = 'none';
                             panel.innerHTML = ''; 
                         }, 2000); 
-                    } else {
+                    } else { // problems with database perhaps?
                         messageBox.innerHTML = `<p style="color: red;">Error: ${data.error || 'Unable to register user.'}</p>`;
                     }
                 } catch (err) {
-                    console.error("Signup error:", err);
-                    document.getElementById('signup-message').innerHTML = "<p style='color: red;'>Server error. Try again later.</p>";
+                    console.error("Signup error:", err); //error message on trap
+                    document.getElementById('signup-message').innerHTML = "<p style='color: red;'>Server error. Try again later.</p>"; // turn on your node.js dumbass
                 }
             });
         }, 50);  
     });
 
-    document.getElementById('view-account').addEventListener('click', async () => {
+    document.getElementById('view-account').addEventListener('click', async () => { // pretty straight forward - grabs user details and displays
         const userId = localStorage.getItem('userId');
         if (!userId) return;
     
@@ -136,14 +137,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('signup-panel').style.display = 'none'; // hide sign-up if visible
     });
 
-    document.getElementById('change-credentials').addEventListener('click', () => {
+    document.getElementById('change-credentials').addEventListener('click', () => { // since this creates another form where the sign-up panel goes, I had the same issue with timing it rendered on the screen but not the DOM
         const html = Mustache.render(changeCredentialsTemplate, {});
         const panel = document.getElementById('account-action-panel');
         panel.innerHTML = html;
         panel.style.display = 'block';
         document.getElementById('signup-panel').style.display = 'none';
     
-        // ⏳ Ensure the DOM is fully updated before we bind
+        // Ensure the DOM is fully updated before we try to actually use the form
         setTimeout(() => {
             requestAnimationFrame(() => {
                 const updateForm = document.getElementById('update-form');
@@ -152,12 +153,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
     
-                console.log("✅ Found #update-form. Binding submit handler...");
-    
-                updateForm.addEventListener('submit', async (e) => {
+                updateForm.addEventListener('submit', async (e) => { // note, the user if offered the change to change email or pass. If either is left blank in the form, their document is unchanged for that field
                     e.preventDefault();
     
-                    const userId = localStorage.getItem('userId');
+                    const userId = localStorage.getItem('userId'); // store pertinant info and gather info to change from the user.
                     const newEmail = document.getElementById('new-email').value.trim();
                     const newPassword = document.getElementById('new-password').value;
                     const confirmPassword = document.getElementById('new-password-confirm').value;
@@ -171,18 +170,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
                     if (!newEmail && !newPassword) return;
     
-                    const body = {};
+                    const body = {}; // fill these with either the existing or changed depending on user action
                     if (newEmail) body.email = newEmail;
                     if (newPassword) body.password = newPassword;
     
                     try {
-                        const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+                        const response = await fetch(`http://localhost:3000/api/users/${userId}`, { // change the document in the collection
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(body)
                         });
     
-                        if (response.ok) {
+                        if (response.ok) { //yay!
                             panel.innerHTML = `
                                 <div class="ui-message success">Account updated successfully.</div>
                             `;
@@ -192,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 panel.style.display = 'none';
                                 document.getElementById('logout-container').style.display = 'flex';
                             }, 6000); // Message shows for 6 seconds
-                        } else {
+                        } else { //BOO!
                             panel.innerHTML = `
                                 <div class="ui-message error">Failed to update account.</div>
                             `;
@@ -209,8 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
     
-                // ✅ Add Cancel Button
-                const cancelBtn = document.querySelector('.cancel-update');
+                const cancelBtn = document.querySelector('.cancel-update'); // cancel button if they don't want to change
                 if (cancelBtn) {
                     cancelBtn.addEventListener('click', () => {
                         panel.style.display = 'none';
@@ -221,12 +219,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 0);
     });
 
-    document.getElementById('logout').addEventListener('click', () => {
+    document.getElementById('logout').addEventListener('click', () => { // logout removed userID and firstname from localStorage
         localStorage.removeItem('userId');
-        localStorage.removeItem('firstName'); // if you're storing it
+        localStorage.removeItem('firstName');
         
-        // Hide protected features
-        document.getElementById('logout').style.display = 'none';
+        document.getElementById('logout').style.display = 'none'; // this all makes sure any forms displayed for next user are blank
         document.getElementById('view-account').disabled = true;
         document.getElementById('change-credentials').disabled = true;
         document.getElementById('account-action-panel').style.display = 'none';
@@ -235,14 +232,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('username').value = '';
         document.getElementById('password').value = '';
     
-        // Show message or reset form
-        const messageBox = document.getElementById('login-message');
+        const messageBox = document.getElementById('login-message'); // peace out user
         messageBox.innerHTML = `
             <div class="ui-message info">You have been logged out.</div>
         `;
     });
     
-
-    document.getElementById('view-account').disabled = true;
+    document.getElementById('view-account').disabled = true; //sets visibility on these when not needed.
     document.getElementById('change-credentials').disabled = true;
 });
