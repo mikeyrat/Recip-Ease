@@ -98,7 +98,7 @@ section.leftCol img {
     width: 100%; 
 }
 
-.login-form input[type="email"], .login-form input[type="password"] {
+.login-form input[type="email"], .login-form input[type="password"], .login-form input[type="text"] {
     width: 100%;
     padding: 10px;
     margin: 5px 0;
@@ -439,6 +439,272 @@ section.leftCol img {
     }
 }
 
+.image-wrapper {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    overflow: hidden;
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.image-overlay {
+    position: absolute;
+    width: 100%;
+    color: white;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    font-family: "Rockwell", sans-serif;
+    font-size: 18px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.top-overlay {
+    top: 0;
+    border-bottom: 1px solid #333;
+}
+
+.bottom-overlay {
+    bottom: 0;
+    border-top: 1px solid #333;
+}
+
+.recipe-detail {
+    border: 1px solid #d9a760;
+    background-color: #fefcf8;
+    padding: 20px;
+    margin-top: 20px;
+    font-family: "Rockwell", "Courier Bold", monospace;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+}
+
+.recipe-header h2 {
+    margin-top: 0;
+    color: #aa7529;
+}
+
+.recipe-category {
+    font-style: italic;
+    color: #634535;
+}
+
+.recipe-image-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.recipe-image-container img {
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+    border: 2px solid #d9a760;
+    border-radius: 10px;
+}
+
+.recipe-description {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #81591f;
+}
+
+.recipe-ingredients ul,
+.recipe-instructions ol {
+    padding-left: 20px;
+    color: #634535;
+}
+
+.closeout-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.close-button {
+    background-color: #e8c99e;
+    padding: 10px 20px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: "Rockwell", monospace;
+}
+
+.close-button:hover {
+    background-color: #edd5b2;
+}
+
+.recipe-ingredients ul {
+    font-family: monospace;
+    white-space: pre-wrap;
+    font-size: 18px; /* or try 20px for more punch */
+    line-height: .5;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .account-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.account-actions button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: "Rockwell", monospace;
+    background-color: #e8c99e;
+    border: none;
+}
+
+#account-action-panel {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fdf6ee;
+    border: 1px solid #d9a760;
+    font-family: "Rockwell", monospace;
+}
+
+.centerCol > .login-form,
+.centerCol > #signup-panel {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.centerCol {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.signup-wrapper {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fffef8;
+    border: 1px solid #d9a760;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.signup-wrapper .form-group {
+    margin-bottom: 12px;
+}
+
+.signup-wrapper input[type="text"],
+.signup-wrapper input[type="email"], 
+.signup-wrapper input[type="password"] {
+    width: 100%;
+    padding: 12px 10px;
+    font-size: 16px;
+    font-family: "Rockwell", monospace;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.recipe-entry {
+    background-color: #e8c99e;
+    border: none;
+    padding: 10px 20px;
+    font-family: "Rockwell", monospace;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.recipe-entry:hover {
+    background-color: #edd5b2;
+}
+
+.centerCol {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#account-action-panel,
+#signup-panel {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 10px;
+    font-size: 16px;
+    font-family: "Rockwell", monospace;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.ui-message {
+    font-family: "Rockwell", monospace;
+    font-size: 16px;
+    padding: 12px 20px;
+    margin-top: 15px;
+    border-radius: 6px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+.ui-message.success {
+    background-color: #e8f8ea;
+    border: 1px solid #81c784;
+    color: #2e7d32;
+}
+
+.ui-message.error {
+    background-color: #fff4f4;
+    border: 1px solid #e57373;
+    color: #c62828;
+}
+
+.ui-message.info {
+    background-color: #fdf6ee;
+    border: 1px solid #d9a760;
+    color: #6b4e2d;
+}
+
+#logout.recipe-entry {
+    background-color: #f6d6b5;
+    color: #5c3b1e;
+}
+
+#logout.recipe-entry:hover {
+    background-color: #f8e2c8;
+}
+
+#logout-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 10px;
+}
+
+#logout {
+    padding: 10px 20px;
+    font-family: "Rockwell", monospace;
+}
 
 
 

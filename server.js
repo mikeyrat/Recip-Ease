@@ -71,7 +71,7 @@ app.get('/api/recipes/random/:count', async (req, res) => {
 		
         const randomRecipes = await collection.aggregate([
             { $sample: { size: Math.min(count, totalRecipes) } },
-            { $project: { _id: 1, name: 1, image: 1 } } 
+            { $project: { _id: 1, name: 1, image: 1, description: 1 } }
         ]).toArray();
 
         res.json(randomRecipes);
@@ -173,7 +173,7 @@ app.get('/api/:collectionName/:id?', async (req, res) => {
 });
 app.post('/api/users/register', async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, firstName, lastName } = req.body;
 
         if (!username || !email || !password) {
             return res.status(400).json({ error: "Username, email, and password are required." });
@@ -198,7 +198,9 @@ app.post('/api/users/register', async (req, res) => {
             email,
             password_hash: hashedPassword,
             created_at: timestamp,
-            updated_at: timestamp
+            updated_at: timestamp,
+			firstName: firstName || "",
+			lastName: lastName || ""
         };
 
         const result = await collection.insertOne(newUser);
@@ -212,7 +214,7 @@ app.post('/api/users/register', async (req, res) => {
 
 app.post('/api/users', async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, firstName, lastName } = req.body;
 
         if (!username || !email || !password) {
             return res.status(400).json({ error: "Username, email, and password are required." });
@@ -236,7 +238,9 @@ app.post('/api/users', async (req, res) => {
             email,
             password_hash: hashedPassword,
             created_at: timestamp,
-            updated_at: timestamp
+            updated_at: timestamp,
+			firstName: firstName || "",
+			lastName: lastName || ""
         };
 
         const result = await collection.insertOne(newUser);
@@ -390,7 +394,7 @@ app.post('/api/:collectionName', async (req, res) => {
 app.put('/api/users/:id', async (req, res) => {
     try {
         const userId = parseInt(req.params.id);
-        const { email, password } = req.body;
+        const { email, password, firstName, lastName } = req.body;
 
         if (!email && !password) {
             return res.status(400).json({ error: "At least one field (email or password) is required for update." });
@@ -400,6 +404,8 @@ app.put('/api/users/:id', async (req, res) => {
         let updateFields = { updated_at: new Date().toISOString() };
 
         if (email) updateFields.email = email;
+		if (firstName) updateFields.firstName = firstName;
+		if (lastName) updateFields.lastName = lastName;
 
         if (password) {
             const hashedPassword = await bcrypt.hash(password, 10);

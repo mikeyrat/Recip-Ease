@@ -13,7 +13,7 @@
         <div id="mediaQueryMessage"></div>
         <section class="leftCol">
             <a href="/" title="Go to homepage">
-                <img src="/images/Recip-easeLogo.png" alt="Recip-ease Logo - Click to go to homepage" style="max-width: 100%;">
+                <img src="/images/RecipeaseLogo.png" alt="Recip-ease Logo - Click to go to homepage" style="max-width: 100%;">
             </a>
             <div id="navigation-placeholder"></div>
         </section>
@@ -21,20 +21,32 @@
             <h1 id="siteName">Recip-Ease</h1>
             <h2 id="tagline">Finally... an easy way to enter, save, recall and share your favorite recipes!</h2>
             <div class="login-form">
-                <form action="#" method="post">
-                    <input type="email" placeholder="Email Address" required>
-                    <input type="password" placeholder="Password" required>
+                <form id="login-form" action="#" method="post">
+                    <input type="text" id="username" placeholder="Username" required>
+                    <input type="password" id="password" placeholder="Password" required>
+                
                     <div class="login-button-container">
                         <button type="submit" class="recipe-entry">Log In</button>
-                        <button type="button" class="recipe-entry">Sign Up</button>
+                        <button type="button" class="recipe-entry" id="show-signup">Sign Up</button>
                     </div>
-            
-                    <div class="social-login">
-                        <button type="button">Log in with Facebook</button>
-                        <button type="button">Log in with Google</button>
+                
+                    <div class="account-actions">
+                        <button id="view-account">Account Info</button>
+                        <button id="change-credentials">Change Email / Password</button>
                     </div>
+                    
+                    
+                    <div id="login-message" style="margin-top: 15px;"></div>
+                       
                 </form>
+                
+                
             </div>
+            <div id="logout-container" style="display: none; text-align: center; margin-top: 20px;">
+                <button id="logout" class="recipe-entry">Log Out</button>
+            </div>
+            <div id="account-action-panel" style="display: none;"></div>
+            <div id="signup-panel" style="display: none;"></div>
         </section>
         <section class="rightCol"> 
             <div class="ad-display">
@@ -43,8 +55,11 @@
         </section>
     </div>
 	<div id="footer-placeholder"></div>
+
 	<script src="templates.js"></script>
-	<script src="commonjs.js"></script>
+    <script src="signin.js"></script>
+    <script src="commonjs.js"></script>
+
 		
 </body>
 </html>
