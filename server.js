@@ -1,77 +1,77 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const bcrypt = require('bcrypt');
+const express = require('express'); // framework for node.js
+const mongoose = require('mongoose'); // yeah, the DB!!
+const cors = require('cors'); // cross origin resource sharing - allow connection to the db without browsers hiccups
+const bcrypt = require('bcrypt'); // encrypts passwords and keeps them hiden
 
-const app = express();
+const app = express(); // create web app and port 
 const port = 3000;
 
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/recip_ease')
-    .then(() => console.log('Connected to MongoDB'))
+mongoose.connect('mongodb://localhost:27017/recip_ease') //main db connection stored for use in all our routes
+    .then(() => console.log('Connected to MongoDB')) // just log it working... or not
     .catch(err => console.error('MongoDB connection error:', err));
 
-const db = mongoose.connection;
-const validCollections = ['recipes', 'dessert_ingredients', 'appetizer_ingredients', 'main_course_ingredients', 'users'];
-const validIngredientCollections = [
+const db = mongoose.connection; //instantiate our connection as "db"
+const validCollections = ['recipes', 'dessert_ingredients', 'appetizer_ingredients', 'main_course_ingredients', 'users']; // we use this const in several routes
+const validIngredientCollections = [ // this is just the ingredients collections, used much later
     "dessert_ingredients",
     "appetizer_ingredients",
     "main_course_ingredients"
 ];
-const validUnits = new Set([
+const validUnits = new Set([ // list of quantities so when recipes are entered only these will work.
     "Cup", "1/2<br>Cup", "1/4<br>Cup", "1/3<br>Cup",
     "TBSP", "1/2<br>TBSP", "TSP", "1/2<br>TSP",
     "Oz.", "Gms.", "Qty", "Other"
 ]);
 
-db.once('open', () => console.log('Connected to MongoDB'));
+db.once('open', () => console.log('Connected to MongoDB')); //establist the MongoDB connection
 
 
 
-app.get('/api/recipes/search', async (req, res) => {
+app.get('/api/recipes/search', async (req, res) => { // route to search recipes by keyword or type
     try {
-        const { query } = req.query;
+        const { query } = req.query; //load the query from express' req object (the info about the incoming http request. req is everywhere)
 
-        if (!query) {
+        if (!query) { // malformed query, or call to api that is wrong
             return res.status(400).json({ error: "Search query is required." });
         }
 
-        const collection = mongoose.connection.collection('recipes');
+        const collection = mongoose.connection.collection('recipes'); //set the collection variable for the search
 
-        const searchResults = await collection.find({
+        const searchResults = await collection.find({ // build the payload for the db query
             $or: [
-                { name: { $regex: query, $options: "i" } },
-                { category: { $regex: query, $options: "i" } },
-                { type: { $regex: query, $options: "i" } }
+                { name: { $regex: query, $options: "i" } }, // recipe name?
+                { category: { $regex: query, $options: "i" } }, // recipe category?
+                { type: { $regex: query, $options: "i" } } // recipe type?
             ]
-        }).toArray();
+        }).toArray(); // load results to array "searchResults"
 
-        if (searchResults.length === 0) {
+        if (searchResults.length === 0) { // no results? Whoops
             return res.status(404).json({ error: "No recipes found matching your search." });
         }
 
-        res.json(searchResults);
+        res.json(searchResults); //search results come back as json, so send them to the calling script that way
     } catch (err) {
-        console.error("Error searching recipes:", err);
-        res.status(500).json({ error: err.message });
+        console.error("Error searching recipes:", err); // catches odd errors
+        res.status(500).json({ error: err.message }); // return error message to calling script
     }
 });
 
-app.get('/api/recipes/random/:count', async (req, res) => {
+app.get('/api/recipes/random/:count', async (req, res) => { // route to call random amount of recipes for display
     try {
-        const count = parseInt(req.params.count);
-        const collection = mongoose.connection.collection('recipes');
+        const count = parseInt(req.params.count); // parse the count parameter to an integer
+        const collection = mongoose.connection.collection('recipes'); // set collection
 
-        const totalRecipes = await collection.countDocuments();
+        const totalRecipes = await collection.countDocuments(); // if recipes db is empty (never!) error
         if (totalRecipes === 0) {
             return res.status(404).json({ error: "No recipes found." });
         }
 		
-        const randomRecipes = await collection.aggregate([
+        const randomRecipes = await collection.aggregate([ // grab all the recipes, and randomly select 'count" of them
             { $sample: { size: Math.min(count, totalRecipes) } },
-            { $project: { _id: 1, name: 1, image: 1, description: 1 } }
+            { $project: { _id: 1, name: 1, image: 1, description: 1 } } // only looking for these fields, though for the slideshow or features
         ]).toArray();
 
         res.json(randomRecipes);
@@ -81,25 +81,25 @@ app.get('/api/recipes/random/:count', async (req, res) => {
     }
 });
 
-app.get('/api/:collectionName', async (req, res) => {
+app.get('/api/:collectionName', async (req, res) => { //generic route that gets documents from the chosen collection
     try {
-        const { collectionName } = req.params;
-        const { types } = req.query;
+        const { collectionName } = req.params; // the collectionName is sent as a parameterized variable to prevent outside interference 
+        const { types } = req.query; 
 
-        const collection = mongoose.connection.collection(collectionName);
+        const collection = mongoose.connection.collection(collectionName); // loads "collection" variable with "collectionName" from URL
 
-        if (validIngredientCollections.includes(collectionName)) {
+        if (validIngredientCollections.includes(collectionName)) { // checks to see if 'collection' is in the global const array validCollections
             let query = {};
 
-            if (types) {
-                query.types = { $in: [types.toLowerCase()] };
+            if (types) { 
+                query.types = { $in: [types.toLowerCase()] }; // if 'type" i sent, make sure it's lowercase like in the collection
             }
-
+                    // most of the above is preparing the payload for the GET statement
             let ingredients = await collection.find(query).toArray();
 
             if (ingredients.length === 0) {
                 return res.status(404).json({ error: `No ingredients found for type '${types}'.` });
-            }
+            } 
 
             return res.json({ collection: collectionName, types: types || null, ingredients });
         }
@@ -107,23 +107,22 @@ app.get('/api/:collectionName', async (req, res) => {
         if (!validCollections.includes(collectionName)) {
             return res.status(400).json({ error: "Invalid collection name." });
         }
-
+            // await the response then load into array
         const data = await collection.find().toArray();
         res.json(data);
     } catch (err) {
-        console.error("Error fetching data:", err);
         res.status(500).json({ error: err.message });
     }
 });
 
-app.get('/api/users/:id', async (req, res) => {
+app.get('/api/users/:id', async (req, res) => { // get the user document based on their ID this is used for a lot of purposes
     try {
         const userId = parseInt(req.params.id);
         const collection = mongoose.connection.collection('users');
 
         const user = await collection.findOne(
             { _id: userId },
-            { projection: { password_hash: 0 } }
+            { projection: { password_hash: 0 } } // tells mongo to exclude hashed passwords from results of this query
         );
 
         if (!user) {
@@ -132,12 +131,11 @@ app.get('/api/users/:id', async (req, res) => {
 
         res.json(user);
     } catch (err) {
-        console.error("Error fetching user:", err);
         res.status(500).json({ error: err.message });
     }
 });
 
-app.get('/api/:collectionName/:id?', async (req, res) => {
+app.get('/api/:collectionName/:id?', async (req, res) => { // generic route to find documents is any collection by ID.
     try {
         const { collectionName, id } = req.params;
         console.log(`Incoming request for: /api/${collectionName}/${id || "ALL"}`);
@@ -164,135 +162,101 @@ app.get('/api/:collectionName/:id?', async (req, res) => {
         }
 
         const data = await collection.find().toArray();
-        console.log(`Returning ${data.length} documents from ${collectionName}`);
         res.json(data);
     } catch (err) {
         console.error("Error fetching data:", err);
         res.status(500).json({ error: err.message });
     }
 });
-app.post('/api/users/register', async (req, res) => {
+app.post('/api/users/register', async (req, res) => { // first POST... this is the route to create new user account
     try {
-        const { username, email, password, firstName, lastName } = req.body;
+        const { username, email, password, firstName, lastName } = req.body; // we want to make fields for all of these, though...
 
-        if (!username || !email || !password) {
+        if (!username || !email || !password) { // ... these are the only one's required
             return res.status(400).json({ error: "Username, email, and password are required." });
         }
 
-        const collection = mongoose.connection.collection('users');
+        const collection = mongoose.connection.collection('users'); // these lines check if email exists in user base
         const existingUser = await collection.findOne({ email });
 
         if (existingUser) {
             return res.status(400).json({ error: "User already exists with this email." });
+        } 
+
+        const existingUsername = await collection.findOne({ username }); // these lines check if username exists in user base
+
+        if (existingUsername) {
+            return res.status(400).json({ error: "User already exists with this username." });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10); // hash the pass
         const timestamp = new Date().toISOString();
 
-        const lastUser = await collection.find().sort({ _id: -1 }).limit(1).toArray();
-        const newUserId = lastUser.length > 0 ? lastUser[0]._id + 1 : 1;
+        const lastUser = await collection.find().sort({ _id: -1 }).limit(1).toArray(); // get the user with the highest user ID so we can make a unique one
+        const newUserId = lastUser.length > 0 ? lastUser[0]._id + 1 : 1; // increment the last so the new user is one higher
 
-        const newUser = {
+        const newUser = { //create the payload to add the user document
             _id: newUserId,
             username,
             email,
-            password_hash: hashedPassword,
+            password_hash: hashedPassword, 
             created_at: timestamp,
             updated_at: timestamp,
-			firstName: firstName || "",
+			firstName: firstName || "", //no name leave blank
 			lastName: lastName || ""
         };
 
-        const result = await collection.insertOne(newUser);
+        const result = await collection.insertOne(newUser); 
 
-        res.status(201).json({ message: "User added successfully", insertedId: result.insertedId });
+        res.status(201).json({ message: "User added successfully", insertedId: result.insertedId }); // return status or error
     } catch (err) {
-        console.error("Error inserting user:", err);
+        console.error("Error inserting user:", err);  //troubleshooting don't need
         res.status(500).json({ error: err.message });
     }
 });
 
-app.post('/api/users', async (req, res) => {
+app.post('/api/users/login', async (req, res) => { //route to log in peeps
     try {
-        const { username, email, password, firstName, lastName } = req.body;
+        const { username, password } = req.body; // get ur username and pass
 
-        if (!username || !email || !password) {
-            return res.status(400).json({ error: "Username, email, and password are required." });
-        }
-
-        const collection = mongoose.connection.collection('users');
-        const lastUser = await collection.find().sort({ _id: -1 }).limit(1).toArray();
-        const newUserId = lastUser.length > 0 ? lastUser[0]._id + 1 : 1;
-
-        const existingUser = await collection.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ error: "User already exists with this email." });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const timestamp = new Date().toISOString();
-
-        const newUser = {
-            _id: newUserId,
-            username,
-            email,
-            password_hash: hashedPassword,
-            created_at: timestamp,
-            updated_at: timestamp,
-			firstName: firstName || "",
-			lastName: lastName || ""
-        };
-
-        const result = await collection.insertOne(newUser);
-        res.status(201).json({ message: "User added successfully", insertedId: result.insertedId });
-    } catch (err) {
-        console.error('Error inserting user:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-app.post('/api/users/login', async (req, res) => {
-    try {
-        const { username, password } = req.body;
-
-        if (!username || !password) {
+        if (!username || !password) { //empty PHHFFFT!
             return res.status(400).json({ error: "username and password are required." });
         }
 
-        const collection = mongoose.connection.collection('users');
+        const collection = mongoose.connection.collection('users'); //set collection
 
-        const user = await collection.findOne({ username });
+        const user = await collection.findOne({ username }); // look for username
 
-        if (!user) {
+        if (!user) { //nope? phhffftt!
             return res.status(401).json({ error: "Invalid username or password." });
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+        const isPasswordValid = await bcrypt.compare(password, user.password_hash); //pass good? bad? deal with it
         if (!isPasswordValid) {
             return res.status(401).json({ error: "Invalid username or password." });
         }
 
-        res.json({ message: "Login successful", userId: user._id });
+        res.json({ message: "Login successful", userId: user._id }); // yay 
     } catch (err) {
         console.error("Login error:", err);
         res.status(500).json({ error: err.message });
     }
 });
 
-app.post("/api/recipes/basicinfo", async (req, res) => {
+app.post("/api/recipes/basicinfo", async (req, res) => { // route to store basic recipe document on entry page
   try {
-		const { name, category, type, description } = req.body;
+		const { name, category, type, description } = req.body; // only require basic info at first, build on ingredients and instuctions
 
-		if (!name || !category || !type) {
+		if (!name || !category || !type) { // need all the info bud
 		  return res.status(400).json({ error: "Missing required fields" });
 		}
 		
-		const lastRecipe = await db.collection("recipes").find().sort({ _id: -1 }).limit(1).toArray();
-		const newRecipeId = lastRecipe.length > 0 ? lastRecipe[0]._id + 1 : 1; 
+		const lastRecipe = await db.collection("recipes").find().sort({ _id: -1 }).limit(1).toArray(); // find highest id in collection
+		const newRecipeId = lastRecipe.length > 0 ? lastRecipe[0]._id + 1 : 1;  // increment for our id
 
-		const newRecipe = {
+		const newRecipe = { // build payload
 		  _id: newRecipeId,
-		  user_id: 1,  // Assuming a single-user system for now
+		  user_id: 1,  
 		  name,
 		  category,
 		  type,
@@ -304,18 +268,18 @@ app.post("/api/recipes/basicinfo", async (req, res) => {
 		  image: ""  // Default empty image field
 		};
 
-		const recipe = await db.collection("recipes").insertOne(newRecipe);
+		const recipe = await db.collection("recipes").insertOne(newRecipe); // add to collection
 		res.status(201).json({ 
-		  message: "Basic recipe information created successfully", 
+		  message: "Basic recipe information created successfully",  // yup good
 		  recipe_id: recipe.insertedId 
 		});
 	  } catch (err) {
-		console.error("Error inserting recipe:", err);
+		console.error("Error inserting recipe:", err); // not so good dont need this line later
 		res.status(500).json({ error: "Failed to create recipe" });
 	}
 });
 
-app.post('/api/recipes', async (req, res) => {
+app.post('/api/recipes', async (req, res) => { //may not use this one after all
     try {
         const { user_id, name, category, type, ingredients, instructions, image } = req.body;
 
@@ -364,7 +328,7 @@ app.post('/api/recipes', async (req, res) => {
 });
 
 
-app.post('/api/:collectionName', async (req, res) => {
+app.post('/api/:collectionName', async (req, res) => { // general POST for any collection. Likely not used by anyone but admin
     try {
         const { collectionName } = req.params;
 
