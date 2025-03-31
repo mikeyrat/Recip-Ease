@@ -44,9 +44,32 @@ app.get('/api/recipes/search', async (req, res) => { // route to search recipes 
             $or: [
                 { name: { $regex: query, $options: "i" } }, // recipe name?
                 { category: { $regex: query, $options: "i" } }, // recipe category?
-                { type: { $regex: query, $options: "i" } } // recipe type?
-            ]
-        }).toArray(); // load results to array "searchResults"
+                { type: { $regex: query, $options: "i" } },// recipe type?
+                { description: { $regex: query, $options: "i" } },
+                {
+                    $expr: {
+                      $gt: [
+                        {
+                          $size: {
+                            $filter: {
+                              input: { $objectToArray: "$ingredients" },
+                              as: "ingredient",
+                              cond: {
+                                $regexMatch: {
+                                  input: "$$ingredient.k",
+                                  regex: query,
+                                  options: "i"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        0
+                      ]
+                    }
+                  }
+                ]
+              }).toArray();
 
         if (searchResults.length === 0) { // no results? Whoops
             return res.status(404).json({ error: "No recipes found matching your search." });

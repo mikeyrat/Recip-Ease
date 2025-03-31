@@ -13,7 +13,7 @@
         <div id="mediaQueryMessage"></div>
         <section class="leftCol">
             <a href="/" title="Go to homepage">
-                <img src="/images/Recip-easeLogo.png" alt="Recip-ease Logo - Click to go to homepage" style="max-width: 100%;">
+                <img src="/images/recipeaselogo.png" alt="Recip-ease Logo - Click to go to homepage" style="max-width: 100%;">
             </a>
             <div id="navigation-placeholder"></div>
         </section>
@@ -22,13 +22,17 @@
             <h2 id="tagline">Finally... an easy way to enter, save, recall and share your favorite recipes!</h2>
             <h2><br>Search for a recipe from our 1000s of users, including yours!</h2>
             <div class="search-form">
-                <form action="#" method="get">
-                    <input type="text" id="searchInput" placeholder="Search for recipes..." aria-label="Search for recipes">
-                    <button type="submit" class="recipe-entry">Search</button>
+                <form id="search-form" action="#" method="get">
+                    <input type="text" id="searchInput" placeholder="Search for recipes by name, description, or ingredient..." aria-label="Search for recipes">
+                    <div class="button-row">
+                        <button type="submit" class="recipe-entry">Search</button>
+                        <button type="button" id="showAllBtn" class="recipe-entry">Show All</button>
+                    </div>
                 </form>
             </div>
             <h2>Search Results:</h2>
             <div class="search-results" id="search-results-placeholder"></div>
+            <div id="full-recipe-view" style="display: none;"></div>
         </section>
         <section class="rightCol"> 
             <div class="ad-display">
@@ -39,6 +43,7 @@
 	<div id="footer-placeholder"></div>
 	<script src="templates.js"></script>
 	<script src="commonjs.js"></script>
+    <script src="javascripts.js"></script>
     <script src="search.js"></script>
 		
 </body>

@@ -8,8 +8,9 @@ document.addEventListener('DOMContentLoaded', function() { //When page loads, ga
     };
 
     const renderedBlog = Mustache.render(blogTemplate, blogData); // call the mushache template with the above array of data
-    document.getElementById('blog-placeholder').innerHTML = renderedBlog; // when called by the html, render it
-  
+    const blogHolder = document.getElementById('blog-placeholder'); // when called by the html, render it
+    if (blogHolder) blogHolder.innerHTML = renderedBlog;
+
     fetch('http://localhost:3000/api/recipes/random/4') // fetch 4 random recipes for display in the featured recipes at the bottom
       .then(response => response.json())
       .then(data => {
@@ -24,8 +25,8 @@ document.addEventListener('DOMContentLoaded', function() { //When page loads, ga
           }));
 
           const rendered = Mustache.render(recipeTemplate, { recipes: recipeList }); // send the list to Mustache to fill the template
-          document.getElementById('recipe-placeholder').innerHTML = rendered; // render it when called.
-
+          const recipeHolder = document.getElementById('recipe-placeholder'); // render it when called.
+          if (recipeHolder) recipeHolder.innerHTML = rendered;
           document.querySelectorAll('.recipe a').forEach((anchor, index) => { 
               anchor.addEventListener('click', function (event) { //wait for user to click a link for a recipe
                   event.preventDefault();
@@ -43,7 +44,8 @@ document.addEventListener('DOMContentLoaded', function() { //When page loads, ga
       .then(response => response.json())
       .then(data => {
           const renderedSlideshow = Mustache.render(slideshowTemplate, { recipes: data }); // gotta love Mustache
-          document.getElementById('slideshow-placeholder').innerHTML = renderedSlideshow; // render it when page loads
+          const slideshowHolder = document.getElementById('slideshow-placeholder'); // render it when page loads
+          if (slideshowHolder) slideshowHolder.innerHTML = renderedSlideshow;
 
           document.querySelectorAll('.slideshow-image').forEach(img => {  // wait for that click
             img.addEventListener('click', function () {
@@ -52,23 +54,30 @@ document.addEventListener('DOMContentLoaded', function() { //When page loads, ga
             });
         });
 
-          const slides = document.querySelectorAll('.slide'); // show the slides
-          slides.forEach((slide, index) => {
-              slide.style.display = index === 0 ? 'block' : 'none';
-          });
+        const slides = document.querySelectorAll('.slide'); // show the slides
 
-          let current = 0;
-          setInterval(() => {
-              slides[current].style.display = 'none';
-              current = (current + 1) % slides.length;
-              slides[current].style.display = 'block';
-          }, 5000); //interval is 5 seconds. Change this to make it longer or shorter
-      })
-      .catch(error => {
-          console.error("Error loading slideshow:", error);
-          document.getElementById('slideshow-placeholder').innerHTML = "<p>Unable to load featured recipes at this time.</p>";
-      });
+        if (slides.length > 0) {
+            slides.forEach((slide, index) => {
+                slide.style.display = index === 0 ? 'block' : 'none';
+            });
+        
+            let current = 0;
+            setInterval(() => {
+                slides[current].style.display = 'none';
+                current = (current + 1) % slides.length;
+                slides[current].style.display = 'block';
+            }, 5000); // interval is 5 seconds. Change this to make it longer or shorter
+        }
+        })
+        .catch(error => {
+            console.error("Error loading slideshow:", error);
+            const placeholder = document.getElementById('slideshow-placeholder');
+            if (placeholder) {
+                placeholder.innerHTML = "<p>Unable to load featured recipes at this time.</p>";
+            }
+        });
 });
+        
 
 function showFullRecipe(recipeId) { // the function the whole site will use to display the recipes.
     fetch(`http://localhost:3000/api/recipes/${recipeId}`) // grab the recipe using it's ID
@@ -145,22 +154,36 @@ function showFullRecipe(recipeId) { // the function the whole site will use to d
           instructions: recipe.instructions || []
         };
 
-        const rendered = Mustache.render(recipeDetailTemplate, recipeData); // load that Mustache template with all our data
-        const fullPanel = document.getElementById('full-recipe-view'); // ready for the call
+        const rendered = Mustache.render(recipeDetailTemplate, recipeData); // load the Mustache template
+        const fullPanel = document.getElementById('full-recipe-view'); // where the recipe will be shown
+
+        if (!fullPanel) {
+            console.error("Missing #full-recipe-view container");
+            return;
+        }
+
         fullPanel.innerHTML = rendered;
 
-        // Toggle visibility to hide the featured recipes portion and display this one
-        document.getElementById('recipe-placeholder').style.display = 'none';
+        // Toggle visibility to hide either featured recipes or search results
+        const recipeBlock = document.getElementById('recipe-placeholder'); // used on index.html
+        const searchBlock = document.getElementById('search-results-placeholder'); // used on search.html
+
+        if (recipeBlock && recipeBlock.style) recipeBlock.style.display = 'none';
+        if (searchBlock && searchBlock.style) searchBlock.style.display = 'none';
         fullPanel.style.display = 'block';
 
-        // Add close button handler at the bottom of the recipe holder. Clicking it hides the recipe panel, and shows the featured recipes again.
-        fullPanel.querySelector('.close-button').addEventListener('click', () => {
-          fullPanel.style.display = 'none';
-          document.getElementById('recipe-placeholder').style.display = 'block';
+        // Add close button handler at the bottom of the recipe panel
+        const closeButton = fullPanel.querySelector('.close-button');
+        if (closeButton) {
+            closeButton.addEventListener('click', () => {
+                fullPanel.style.display = 'none';
+                if (recipeBlock && recipeBlock.style) recipeBlock.style.display = 'block';
+                if (searchBlock && searchBlock.style) searchBlock.style.display = 'block';
+            });
+        }
+        })
+        .catch(err => {
+            console.error("Error loading recipe:", err);
         });
-      })
-      .catch(err => {
-        console.error("Error loading recipe:", err);
-      });
 }
 

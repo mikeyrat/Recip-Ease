@@ -68,7 +68,6 @@ const searchResultsTemplate = `
     <li>
         <h3>{{name}}</h3>
         <button class="see-full-recipe">See Full Recipe</button>
-        <button class="favorite">Favorite</button>
     </li>
     {{/recipes}}
     </ul>

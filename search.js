@@ -1,35 +1,44 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const recipesData = {
-        recipes: [
-            { name: "Chicken ala King" },
-            { name: "Southern Fried Chicken" },
-            { name: "Roast Chicken" },
-            { name: "Sweet Sour Chicken" },
-            { name: "Chicken Salad" },
-            { name: "Sesame Baked Chicken" },
-            { name: "Wicked Chicken" },
-            { name: "Hot Barbeque Chicken Wings" },
-            { name: "Chicken Noodle Soup" }
-        ]
-    };
+document.addEventListener('DOMContentLoaded', function () {
+    const resultsContainer = document.getElementById('search-results-placeholder');
 
-   
-    const rendered = Mustache.render(searchResultsTemplate, recipesData);
-    document.getElementById('search-results-placeholder').innerHTML = rendered;
+    function renderRecipes(recipes) {
+        const rendered = Mustache.render(searchResultsTemplate, { recipes });
+        resultsContainer.innerHTML = rendered;
 
-    const seeFullRecipeButtons = document.querySelectorAll('.see-full-recipe');
-    seeFullRecipeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            alert("Recipe contents will be dynamically retrieved programmatically from MongoDB when code is fully implemented");
+        const seeFullRecipeButtons = document.querySelectorAll('.see-full-recipe');
+        seeFullRecipeButtons.forEach((button, index) => {
+            button.addEventListener('click', function () {
+                const recipeId = recipes[index]._id;
+                showFullRecipe(recipeId); // 🔥 This is the same function from javascripts.js
+            });
         });
+    }
+
+    // Search form logic
+    document.getElementById('search-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const query = document.getElementById('searchInput').value.trim();
+        if (!query) return;
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/recipes/search?query=${encodeURIComponent(query)}`);
+            const data = await response.json();
+            const recipes = Array.isArray(data) ? data : data.recipes;
+            renderRecipes(recipes);
+        } catch (err) {
+            resultsContainer.innerHTML = `<p class="ui-message error">No recipes found or error occurred.</p>`;
+        }
     });
 
-    const favoriteButtons = document.querySelectorAll('.favorite');
-    favoriteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            alert("To be implemented in full site.");
-        });
+    // Show All button logic
+    document.getElementById('showAllBtn').addEventListener('click', async function () {
+        try {
+            const response = await fetch('http://localhost:3000/api/recipes');
+            const data = await response.json();
+            const recipes = Array.isArray(data) ? data : data.recipes;
+            renderRecipes(recipes);
+        } catch (err) {
+            resultsContainer.innerHTML = `<p class="ui-message error">Unable to fetch all recipes.</p>`;
+        }
     });
 });
-
-
