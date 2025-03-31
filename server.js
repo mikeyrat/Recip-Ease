@@ -426,26 +426,26 @@ app.put('/api/recipes/:id/ingredients', async (req, res) => { // add or update i
     }
 });
 
-app.put('/api/recipes/:id/instructions', async (req, res) => {
+app.put('/api/recipes/:id/instructions', async (req, res) => { // PUT for adding - updating instructions in a recipe
     try {
-        const { id } = req.params;
-        const docId = parseInt(id);
-        const updateData = req.body; 
+        const { id } = req.params; // only required paramaters is the recipe id
+        const docId = parseInt(id); // make int
+        const updateData = req.body;  // instantiate variable for payload
 
-        if (!updateData.push || !updateData.push.instructions) {
+        if (!updateData.push || !updateData.push.instructions) { // gotta have text
             return res.status(400).json({ error: "Instruction text is required." });
         }
 
-        const collection = mongoose.connection.collection('recipes');
-        const recipe = await collection.findOne({ _id: docId });
+        const collection = mongoose.connection.collection('recipes'); // open connection
+        const recipe = await collection.findOne({ _id: docId }); // is recipe there?
 
         if (!recipe) {
-            return res.status(404).json({ error: "Recipe not found." });
+            return res.status(404).json({ error: "Recipe not found." }); // sorry no instructions for you!
         }
 
-        if (!Array.isArray(recipe.instructions)) {
-            console.log("Fixing invalid instructions field...");
-            await collection.updateOne({ _id: docId }, { $set: { instructions: [] } });
+        if (!Array.isArray(recipe.instructions)) { // some older recipes may not have instructions as array, if so fix
+            console.log("Fixing invalid instructions field..."); // troubleshooting remove plz later
+            await collection.updateOne({ _id: docId }, { $set: { instructions: [] } }); // OK, insert that puppy
         }
 
         const result = await collection.updateOne(
@@ -453,78 +453,78 @@ app.put('/api/recipes/:id/instructions', async (req, res) => {
             { $push: { instructions: updateData.push.instructions } }
         );
 
-        if (result.matchedCount === 0) {
-            return res.status(404).json({ error: "Recipe not found." });
+        if (result.matchedCount === 0) { // 'sall good?
+            return res.status(404).json({ error: "Recipe not found." }); //nope
         }
 
-        res.json({ message: "Instruction added successfully", modifiedCount: result.modifiedCount });
+        res.json({ message: "Instruction added successfully", modifiedCount: result.modifiedCount }); //yay!
     } catch (err) {
-        console.error("Error updating recipe:", err);
+        console.error("Error updating recipe:", err); //troubleshooting remove later
         res.status(500).json({ error: err.message });
     }
 });
 
-app.put('/api/:collection/:ingredient/increment', async (req, res) => {
+app.put('/api/:collection/:ingredient/increment', async (req, res) => {  // the magic behind the site!!! this route updates an ingredient's popularity
     try {
-        const { collection, ingredient } = req.params;
+        const { collection, ingredient } = req.params; // need the collection name and ingredient (three diff collections for recipe ingredients)
 
-        if (!validIngredientCollections.includes(collection)) {
+        if (!validIngredientCollections.includes(collection)) { // confirm collection is on the list
             return res.status(400).json({ error: "Invalid ingredient collection name." });
         }
 
-        const collectionRef = mongoose.connection.collection(collection);
+        const collectionRef = mongoose.connection.collection(collection); //open collection
 
-        console.log(`Incrementing usage count for ingredient: ${ingredient} in collection: ${collection}`);
+        console.log(`Incrementing usage count for ingredient: ${ingredient} in collection: ${collection}`); //so cool!
 
-        const ingredientId = parseInt(ingredient);
+        const ingredientId = parseInt(ingredient); // grab and parse the current usage_count
 
-        const result = await collectionRef.updateOne(
+        const result = await collectionRef.updateOne( //once you have it increment it
             { $or: [{ ingredient: ingredient }, { _id: ingredientId }] }, 
             { $inc: { usage_count: 1 } }
         );
 
-        if (result.matchedCount === 0) {
+        if (result.matchedCount === 0) { // whoopsie. we shouldnt see this tho, because this is called immediately after being added to a recipe
             return res.status(404).json({ error: `Ingredient '${ingredient}' not found in ${collection}.` });
-        }
+        } // there may be a modification here if for a stretch item we add custom ingredients later
 
-        res.json({ message: `Usage count incremented for '${ingredient}'.`, modifiedCount: result.modifiedCount });
+        res.json({ message: `Usage count incremented for '${ingredient}'.`, modifiedCount: result.modifiedCount }); //yay!
     } catch (err) {
-        console.error("Error updating ingredient usage count:", err);
+        console.error("Error updating ingredient usage count:", err); // damn! but delete after testing
         res.status(500).json({ error: err.message });
     }
 });
 
-app.put('/api/recipes/:id', async (req, res) => {
+app.put('/api/recipes/:id', async (req, res) => { //update recipe documents in general
     try {
         const { id } = req.params;
         const updateData = req.body;
 
         if (!updateData || Object.keys(updateData).length === 0) {
-            return res.status(400).json({ error: "Update data is required." });
+            return res.status(400).json({ error: "Update data is required." }); // gotta have a payload or no thanks
         }
 
         const collection = mongoose.connection.collection('recipes');
         const docId = parseInt(id); 
 
-        updateData.updated_at = new Date(); 
+        updateData.updated_at = new Date(); // the rest of the payload gotta come from the javascript tho
 
         const result = await collection.updateOne(
             { _id: docId },
             { $set: updateData }
         );
 
-        if (result.matchedCount === 0) {
+        if (result.matchedCount === 0) { // no recipe, no update
             return res.status(404).json({ error: "Recipe not found." });
         }
-
-        res.json({ message: "Recipe updated successfully", modifiedCount: result.modifiedCount });
+ 
+        res.json({ message: "Recipe updated successfully", modifiedCount: result.modifiedCount }); // yay!
     } catch (err) {
-        console.error("Error updating recipe:", err);
+        console.error("Error updating recipe:", err); // remove after testing
         res.status(500).json({ error: err.message });
     }
 });
 
-app.put('/api/:collectionName/:id', async (req, res) => {
+app.put('/api/:collectionName/:id', async (req, res) => {  //generic PUT for updating about any collection document. Admins only right now
     try {
         const { collectionName, id } = req.params;
         const updateData = req.body;
@@ -541,7 +541,7 @@ app.put('/api/:collectionName/:id', async (req, res) => {
 
         let updateOperation = { $set: { updated_at: new Date().toISOString() } };
 
-        if (updateData.push && updateData.push.instructions) {
+        if (updateData.push && updateData.push.instructions) { // instructions is special case, so treat it so if the PUT includes them
             const document = await collection.findOne({ _id: docId });
             if (!document) {
                 return res.status(404).json({ error: "Document not found." });
@@ -564,36 +564,36 @@ app.put('/api/:collectionName/:id', async (req, res) => {
 
         const result = await collection.updateOne({ _id: docId }, updateOperation);
 
-        if (result.matchedCount === 0) {
+        if (result.matchedCount === 0) { // basic error handling from here forward
             return res.status(404).json({ error: "Document not found." });
         }
 
         res.json({ message: "Document updated successfully", modifiedCount: result.modifiedCount });
     } catch (err) {
-        console.error("Error updating document:", err);
+        console.error("Error updating document:", err); // remove after test
         res.status(500).json({ error: err.message });
     }
 });
 
-app.delete('/api/recipes/:id/instructions', async (req, res) => {
+app.delete('/api/recipes/:id/instructions', async (req, res) => { // DELETE route for instructions of a recipe
     try {
         const { id } = req.params;
         const docId = parseInt(id);
-        const { instructions } = req.body;
+        const { instructions } = req.body; // these bastids are special case, so get their own route
 
         if (!instructions) {
-            return res.status(400).json({ error: "Instruction text is required for deletion." });
+            return res.status(400).json({ error: "Instruction text is required for deletion." }); // tell me what to remove
         }
 
         const collection = mongoose.connection.collection('recipes');
 
-        const recipe = await collection.findOne({ _id: docId });
+        const recipe = await collection.findOne({ _id: docId }); // open connection, find the recipe
 
         if (!recipe) {
-            return res.status(404).json({ error: "Recipe not found." });
+            return res.status(404).json({ error: "Recipe not found." }); //whoopsie
         }
 
-        if (!Array.isArray(recipe.instructions)) {
+        if (!Array.isArray(recipe.instructions)) { // instructions may not be array
             return res.status(400).json({ error: "`instructions` field is missing or not an array." });
         }
 
@@ -603,35 +603,35 @@ app.delete('/api/recipes/:id/instructions', async (req, res) => {
         );
 
         if (result.modifiedCount === 0) {
-            return res.status(400).json({ error: "Instruction not found in recipe." });
+            return res.status(400).json({ error: "Instruction not found in recipe." }); // cant find what you want daggonit!
         }
 
-        res.json({ message: "Instruction removed successfully", modifiedCount: result.modifiedCount });
+        res.json({ message: "Instruction removed successfully", modifiedCount: result.modifiedCount }); // Ok I found it and deleted it
     } catch (err) {
-        console.error("Error deleting instruction:", err);
-        res.status(500).json({ error: err.message });
+        console.error("Error deleting instruction:", err); //troubleshooting remove later
+        res.status(500).json({ error: err.message }); 
     }
 });
 
-app.delete('/api/recipes/:id/ingredients', async (req, res) => {
+app.delete('/api/recipes/:id/ingredients', async (req, res) => { // deleting ingredients are kinda different
     try {
         const { id } = req.params;
         const docId = parseInt(id);
         const { name } = req.body;
 
         if (!name) {
-            return res.status(400).json({ error: "Ingredient name is required for deletion." });
+            return res.status(400).json({ error: "Ingredient name is required for deletion." }); // same checks as above
         }
 
         const collection = mongoose.connection.collection('recipes');
 
-        const recipe = await collection.findOne({ _id: docId });
+        const recipe = await collection.findOne({ _id: docId }); //same as above
         if (!recipe) {
             return res.status(404).json({ error: "Recipe not found." });
         }
 
         if (!recipe.ingredients || !recipe.ingredients[name]) {
-            return res.status(400).json({ error: `Ingredient '${name}' not found in the recipe.` });
+            return res.status(400).json({ error: `Ingredient '${name}' not found in the recipe.` }); // sorry no lime juice here to delete
         }
 
         const result = await collection.updateOne(
@@ -640,17 +640,17 @@ app.delete('/api/recipes/:id/ingredients', async (req, res) => {
         );
 
         if (result.modifiedCount === 0) {
-            return res.status(400).json({ error: `Ingredient '${name}' could not be removed.` });
+            return res.status(400).json({ error: `Ingredient '${name}' could not be removed.` }); // OK, its gone now
         }
 
-        res.json({ message: `Ingredient '${name}' removed successfully`, modifiedCount: result.modifiedCount });
+        res.json({ message: `Ingredient '${name}' removed successfully`, modifiedCount: result.modifiedCount }); //NOTE: if we remove the recipe we may need to decrement the usage_count. Stretch item?
     } catch (err) {
-        console.error("Error deleting ingredient:", err);
+        console.error("Error deleting ingredient:", err); // troubleshooting remove later
         res.status(500).json({ error: err.message });
     }
 });
 
-app.delete('/api/recipes/:id', async (req, res) => {
+app.delete('/api/recipes/:id', async (req, res) => { //General find and delete a whole recipe typical stuff here yadda yadda
     try {
         const docId = parseInt(req.params.id);
         const collection = mongoose.connection.collection('recipes');
@@ -675,6 +675,6 @@ app.delete('/api/recipes/:id', async (req, res) => {
 });
 
 
-app.listen(port, () => {
+app.listen(port, () => { // glad someone is listening... my wife says I never do
     console.log(`Server running on http://localhost:${port}`);
 });
