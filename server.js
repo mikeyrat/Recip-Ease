@@ -328,39 +328,39 @@ app.post('/api/recipes', async (req, res) => { //may not use this one after all
 });
 
 
-app.post('/api/:collectionName', async (req, res) => { // general POST for any collection. Likely not used by anyone but admin
+app.post('/api/:collectionName', async (req, res) => { // general POST for any collection. Likely not used by anyone but admins
     try {
         const { collectionName } = req.params;
 
-        if (collectionName === 'users') {
+        if (collectionName === 'users') { // except users... no one makes users
             return res.status(403).json({ error: "Unauthorized to add users through this endpoint." });
         }
 
-        if (!validCollections.includes(collectionName)) {
+        if (!validCollections.includes(collectionName)) { // must be valid collection
             return res.status(400).json({ error: "Invalid collection name." });
         }
 
-        const newData = req.body;
+        const newData = req.body; // payload comes from javascript, no assembly (here) required
         if (!newData || Object.keys(newData).length === 0) {
             return res.status(400).json({ error: "Request body is empty." });
         }
 
-        const collection = mongoose.connection.collection(collectionName);
+        const collection = mongoose.connection.collection(collectionName); // fire away, whatever you sent
         const result = await collection.insertOne(newData);
 
-        res.status(201).json({ message: "Document added successfully", insertedId: result.insertedId });
+        res.status(201).json({ message: "Document added successfully", insertedId: result.insertedId }); // lets hope
     } catch (err) {
         console.error("Error inserting document:", err);
         res.status(500).json({ error: err.message });
     }
 });
 
-app.put('/api/users/:id', async (req, res) => {
+app.put('/api/users/:id', async (req, res) => { // change user email or password
     try {
         const userId = parseInt(req.params.id);
-        const { email, password, firstName, lastName } = req.body;
+        const { email, password, firstName, lastName } = req.body; // this could be problem unless checked on java script side. first and last not required on acct creation
 
-        if (!email && !password) {
+        if (!email && !password) { // one of the other bro, or both
             return res.status(400).json({ error: "At least one field (email or password) is required for update." });
         }
 
@@ -368,60 +368,60 @@ app.put('/api/users/:id', async (req, res) => {
         let updateFields = { updated_at: new Date().toISOString() };
 
         if (email) updateFields.email = email;
-		if (firstName) updateFields.firstName = firstName;
-		if (lastName) updateFields.lastName = lastName;
+		if (firstName) updateFields.firstName = firstName; // need to test... what if empty?
+		if (lastName) updateFields.lastName = lastName; // same same
 
         if (password) {
             const hashedPassword = await bcrypt.hash(password, 10);
             updateFields.password_hash = hashedPassword;
         }
 
-        const result = await collection.updateOne({ _id: userId }, { $set: updateFields });
+        const result = await collection.updateOne({ _id: userId }, { $set: updateFields }); // fire away
 
-        if (result.matchedCount === 0) {
+        if (result.matchedCount === 0) { // whoops no user by that ID. someone messed up
             return res.status(404).json({ error: "User not found." });
         }
 
         res.json({ message: "User updated successfully", modifiedCount: result.modifiedCount });
     } catch (err) {
-        console.error("Error updating user:", err);
+        console.error("Error updating user:", err); // testing remove later
         res.status(500).json({ error: err.message });
     }
 });
 
-app.put('/api/recipes/:id/ingredients', async (req, res) => {
+app.put('/api/recipes/:id/ingredients', async (req, res) => { // add or update ingredients to recipe document
     try {
-        const { id } = req.params;
-        const docId = parseInt(id);
-        const { name, quantity, unit } = req.body;
+        const { id } = req.params; // gotta have recipe id
+        const docId = parseInt(id);  // gotta be int
+        const { name, quantity, unit } = req.body; // gotta have all this stuff
 
-        if (!name || quantity === undefined || !unit) {
+        if (!name || quantity === undefined || !unit) { // gotta have it all bro or you dont go
             return res.status(400).json({ error: "Ingredient name, quantity, and unit are required." });
         }
 
-        if (!validUnits.has(unit)) {
+        if (!validUnits.has(unit)) { //validUnits from above the first route
             return res.status(400).json({ error: `Invalid unit. Accepted units: ${[...validUnits].join(", ")}` });
         }
 
         const collection = mongoose.connection.collection('recipes');
 
-        const recipe = await collection.findOne({ _id: docId });
-        if (!recipe) {
+        const recipe = await collection.findOne({ _id: docId }); // first check to see if you have the recipe
+        if (!recipe) { // no recipe no PUT
             return res.status(404).json({ error: "Recipe not found." });
         }
 
-        const result = await collection.updateOne(
+        const result = await collection.updateOne( // all good, so PUT
             { _id: docId },
             { $set: { [`ingredients.${name}`]: { quantity, unit } } }
         );
 
-        if (result.matchedCount === 0) {
+        if (result.matchedCount === 0) { // thought we'd been here, but check again for like error checking
             return res.status(404).json({ error: "Recipe not found." });
         }
 
-        res.json({ message: "Ingredient added/updated successfully", modifiedCount: result.modifiedCount });
+        res.json({ message: "Ingredient added/updated successfully", modifiedCount: result.modifiedCount }); //yay
     } catch (err) {
-        console.error("Error updating ingredient:", err);
+        console.error("Error updating ingredient:", err);  /// troubleshooting delete later
         res.status(500).json({ error: err.message });
     }
 });
