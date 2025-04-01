@@ -9,14 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Show the recipe
     showFullRecipe(recipeId);
     setTimeout(() => {
         const goBackBtn = document.querySelector('#full-recipe-view .close-button');
         if (goBackBtn) goBackBtn.style.display = 'none';
     }, 300);
 
-    // Setup sharing once the DOM is ready and after a delay to let rendering happen
     setTimeout(() => {
         const sharePanel = document.getElementById('share-buttons');
         if (!sharePanel) return;
@@ -24,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const baseURL = window.location.origin;
         const fullURL = `${baseURL}/recipe.html?id=${recipeId}`;
 
-        // Setup buttons
         document.getElementById('facebook-share').onclick = () => {
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullURL)}`, '_blank');
         };
@@ -49,5 +46,5 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         sharePanel.style.display = 'block';
-    }, 300); // Give the recipe time to render
+    }, 300); 
 });

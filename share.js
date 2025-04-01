@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const rendered = Mustache.render(shareTemplate, { recipes });
         resultsContainer.innerHTML = rendered;
 
-        // Handle share button clicks
         const shareButtons = document.querySelectorAll('.share-recipe');
         shareButtons.forEach(button => {
             const recipeId = button.getAttribute('data-id');
@@ -15,12 +14,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        // Handle preview button clicks
         const previewButtons = document.querySelectorAll('.preview-recipe');
         previewButtons.forEach(button => {
             const recipeId = button.getAttribute('data-id');
             button.addEventListener('click', () => {
-                showFullRecipe(recipeId); // defined globally in javascripts.js
+                showFullRecipe(recipeId); 
             });
         });
     }
@@ -36,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Search form submit handler
     document.getElementById('search-form').addEventListener('submit', async function (e) {
         e.preventDefault();
         const query = document.getElementById('searchInput').value.trim();
@@ -52,9 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Show All button handler
     document.getElementById('showAllBtn').addEventListener('click', fetchAllRecipes);
 
-    // Initial load
     fetchAllRecipes();
 });
