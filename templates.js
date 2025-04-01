@@ -11,7 +11,7 @@ const navTemplate = `
 
 const footerTemplate = `
     <footer class="site-footer">
-        <p>© 2024 Recip-Ease. All rights reserved.</p>
+        <p>© 2025 MyRecipEase. All rights reserved.</p>
         <nav>
             <ul>
                 <li><a href="/privacy">Privacy Policy</a></li>
