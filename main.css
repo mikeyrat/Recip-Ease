@@ -788,3 +788,34 @@ input[type="password"] {
         max-width: 100%;
     }
 }
+
+.share-button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .share-button-row .recipe-entry {
+    flex: 0 0 auto;
+    min-width: auto;
+    width: auto;
+  }
+
+  #facebook-share {
+    background-color: #1877F2; /* Facebook blue */
+    color: white;
+    border: none;
+  }
+  
+  #twitter-share {
+    background-color: #1DA1F2; /* Twitter/X blue */
+    color: white;
+    border: none;
+  }
+  
+  #facebook-share:hover,
+  #twitter-share:hover {
+    opacity: 0.9;
+    cursor: pointer;
+  }

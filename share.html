@@ -13,15 +13,31 @@
         <div id="mediaQueryMessage"></div>
         <section class="leftCol">
             <a href="/" title="Go to homepage">
-                <img src="/images/Recip-easeLogo.png" alt="Recip-ease Logo - Click to go to homepage" style="max-width: 100%;">
+                <img src="/images/recipeaselogo.png" alt="Recip-ease Logo - Click to go to homepage" style="max-width: 100%;">
             </a>
             <div id="navigation-placeholder"></div>
         </section>
         <section class="centerCol">
             <h1 id="siteName">Recip-Ease</h1>
             <h2 id="tagline">Finally... an easy way to enter, save, recall and share your favorite recipes!</h2>
-            <h2><br>Your Recipes - Share To Socials or Email a Friend!</h2>
-            <div class="search-results" id="search-results-placeholder"></div>
+            <h2>Your Recipes - Share To Socials or Email a Friend!</h2>
+
+        <div class="search-form">
+            <form id="search-form" action="#" method="get">
+                <input type="text" id="searchInput" placeholder="Search by name, category, type, description, or ingredient..." aria-label="Search for recipes">
+                <div class="button-row">
+                    <button type="submit" class="recipe-entry">Search</button>
+                    <button type="button" id="showAllBtn" class="recipe-entry">Show All</button>
+                </div>
+            </form>
+        </div>
+
+        <h2 id="results-header">Search Results:</h2>
+    <div class="search-results" id="search-results-placeholder">
+        <p class="ui-message info">Search results will appear here once you enter a recipe name, ingredient, or keyword above... or click "Show All" to see everything.</p>
+            </div>
+            <div id="full-recipe-view" style="display: none;">
+    </div>
         </section>
         <section class="rightCol"> 
             <div class="ad-display">
@@ -30,6 +46,7 @@
         </section>
     </div>
 	<div id="footer-placeholder"></div>
+    <script src="javascripts.js"></script>
 	<script src="templates.js"></script>
 	<script src="commonjs.js"></script>
     <script src="share.js"></script>

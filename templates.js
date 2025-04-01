@@ -75,14 +75,14 @@ const searchResultsTemplate = `
 
 const shareTemplate = `
 <ul>
-    {{#recipes}}
-    <li>
-        <h3>{{name}}</h3>
-        <button class="see-full-recipe">Share to Socials</button>
-        <button class="favorite">Email a Friend</button>
-    </li>
-    {{/recipes}}
-    </ul>
+  {{#recipes}}
+  <li>
+    <h3>{{name}}</h3>
+    <button class="share-recipe" data-id="{{_id}}">Share</button>
+    <button class="preview-recipe" data-id="{{_id}}">Preview Recipe</button>
+  </li>
+  {{/recipes}}
+</ul>
 `;
 
 const slideshowTemplate = `
@@ -136,7 +136,7 @@ const recipeDetailTemplate = `
     </div>
 
     <div class="closeout-buttons">
-        <button class="close-button">Back to Results</button>
+        <button class="close-button">Go Back</button>
     </div>
 </div>
 `;
@@ -199,3 +199,4 @@ const changeCredentialsTemplate = `
     </div>
 </form>
 `;
+

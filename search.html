@@ -23,15 +23,17 @@
             <h2><br>Search for a recipe from our 1000s of users, including yours!</h2>
             <div class="search-form">
                 <form id="search-form" action="#" method="get">
-                    <input type="text" id="searchInput" placeholder="Search for recipes by name, description, or ingredient..." aria-label="Search for recipes">
+                    <input type="text" id="searchInput" placeholder="Search by name, categoty, type, description, or ingredient..." aria-label="Search for recipes">
                     <div class="button-row">
                         <button type="submit" class="recipe-entry">Search</button>
                         <button type="button" id="showAllBtn" class="recipe-entry">Show All</button>
                     </div>
                 </form>
             </div>
-            <h2>Search Results:</h2>
-            <div class="search-results" id="search-results-placeholder"></div>
+            <h2 id="results-header">Search Results:</h2>
+            <div class="search-results" id="search-results-placeholder">
+                <p class="ui-message info">Search results will appear here once you enter a recipe name, ingredient, or keyword above... or click "Show All" to see everything.</p>
+            </div>
             <div id="full-recipe-view" style="display: none;"></div>
         </section>
         <section class="rightCol"> 

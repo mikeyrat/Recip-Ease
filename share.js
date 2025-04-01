@@ -1,38 +1,60 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const recipesData = {
-        recipes: [
-            { name: "Bejing Beef - Panda Copycat" },
-            { name: "Penne with Vodka Sauce" },
-            { name: "Arrabiata (Angry) Sauce" },
-            { name: "Mom's Ruebens" },
-            { name: "Crock Pot BBQ Beef" },
-            { name: "Steak Diane - Sorta" },
-            { name: "Deb's Ricotta Cookies" },
-            { name: "Herion Wings - My Version" },
-            { name: "Best Pizza Dough" },
-            { name: "Old School Beef Casserole" },
-            { name: "Peanut Butter Cookies" },
-            { name: "My Fajita Marinade" }
-        ]
-    };
+document.addEventListener('DOMContentLoaded', function () {
+    const resultsContainer = document.getElementById('search-results-placeholder');
 
-   
-    const rendered = Mustache.render(shareTemplate, recipesData);
-    document.getElementById('search-results-placeholder').innerHTML = rendered;
+    function renderRecipes(recipes) {
+        const rendered = Mustache.render(shareTemplate, { recipes });
+        resultsContainer.innerHTML = rendered;
 
-    const seeFullRecipeButtons = document.querySelectorAll('.see-full-recipe');
-    seeFullRecipeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            alert("Sharing to social media will be implemented in the full site.");
+        // Handle share button clicks
+        const shareButtons = document.querySelectorAll('.share-recipe');
+        shareButtons.forEach(button => {
+            const recipeId = button.getAttribute('data-id');
+            button.addEventListener('click', () => {
+                const shareUrl = `recipe.html?id=${recipeId}`;
+                window.open(shareUrl, '_blank');
+            });
         });
+
+        // Handle preview button clicks
+        const previewButtons = document.querySelectorAll('.preview-recipe');
+        previewButtons.forEach(button => {
+            const recipeId = button.getAttribute('data-id');
+            button.addEventListener('click', () => {
+                showFullRecipe(recipeId); // defined globally in javascripts.js
+            });
+        });
+    }
+
+    async function fetchAllRecipes() {
+        try {
+            const response = await fetch('http://localhost:3000/api/recipes');
+            const data = await response.json();
+            const recipes = Array.isArray(data) ? data : data.recipes;
+            renderRecipes(recipes);
+        } catch (err) {
+            resultsContainer.innerHTML = `<p class="ui-message error">Unable to fetch recipes for sharing.</p>`;
+        }
+    }
+
+    // Search form submit handler
+    document.getElementById('search-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const query = document.getElementById('searchInput').value.trim();
+        if (!query) return;
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/recipes/search?query=${encodeURIComponent(query)}`);
+            const data = await response.json();
+            const recipes = Array.isArray(data) ? data : data.recipes;
+            renderRecipes(recipes);
+        } catch (err) {
+            resultsContainer.innerHTML = `<p class="ui-message error">Search error occurred.</p>`;
+        }
     });
 
-    const favoriteButtons = document.querySelectorAll('.favorite');
-    favoriteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            alert("Email to a Friend will be implemented in full site.");
-        });
-    });
+    // Show All button handler
+    document.getElementById('showAllBtn').addEventListener('click', fetchAllRecipes);
+
+    // Initial load
+    fetchAllRecipes();
 });
-
-

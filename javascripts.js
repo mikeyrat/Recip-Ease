@@ -171,6 +171,11 @@ function showFullRecipe(recipeId) { // the function the whole site will use to d
         if (recipeBlock && recipeBlock.style) recipeBlock.style.display = 'none';
         if (searchBlock && searchBlock.style) searchBlock.style.display = 'none';
         fullPanel.style.display = 'block';
+        const resultsHeader = document.getElementById('results-header');
+        const featuredHeader = document.getElementById('featured-header');
+
+        if (resultsHeader) resultsHeader.textContent = 'Full Recipe:';
+        if (featuredHeader) featuredHeader.textContent = 'Full Recipe:';
 
         // Add close button handler at the bottom of the recipe panel
         const closeButton = fullPanel.querySelector('.close-button');
@@ -179,6 +184,12 @@ function showFullRecipe(recipeId) { // the function the whole site will use to d
                 fullPanel.style.display = 'none';
                 if (recipeBlock && recipeBlock.style) recipeBlock.style.display = 'block';
                 if (searchBlock && searchBlock.style) searchBlock.style.display = 'block';
+
+                const resultsHeader = document.getElementById('results-header');
+                const featuredHeader = document.getElementById('featured-header');
+
+                if (resultsHeader) resultsHeader.textContent = 'Search Results:';
+                if (featuredHeader) featuredHeader.textContent = 'Featured Recipes';
             });
         }
         })

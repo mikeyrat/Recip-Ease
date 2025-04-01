@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => { // this mess is for the signin page. And I thought it would be my easiest page LOL!
+
     const loginForm = document.getElementById('login-form'); //call these forms to the webpage when it renders
     const messageBox = document.getElementById('login-message');
 
@@ -124,8 +125,13 @@ document.addEventListener('DOMContentLoaded', () => { // this mess is for the si
     });
 
     document.getElementById('view-account').addEventListener('click', async () => { // pretty straight forward - grabs user details and displays
-        const userId = localStorage.getItem('userId');
-        if (!userId) return;
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                document.getElementById('login-message').innerHTML = `
+                    <p style="color: red;">Please sign in to view account details.</p>
+                `;
+                return;
+            }
     
         const response = await fetch(`http://localhost:3000/api/users/${userId}`);
         const user = await response.json();
@@ -138,6 +144,14 @@ document.addEventListener('DOMContentLoaded', () => { // this mess is for the si
     });
 
     document.getElementById('change-credentials').addEventListener('click', () => { // since this creates another form where the sign-up panel goes, I had the same issue with timing it rendered on the screen but not the DOM
+        const userId = localStorage.getItem('userId');
+            if (!userId) {
+                document.getElementById('login-message').innerHTML = `
+                    <p style="color: red;">Please sign in to change account details.</p>
+                `;
+                return;
+            }
+        
         const html = Mustache.render(changeCredentialsTemplate, {});
         const panel = document.getElementById('account-action-panel');
         panel.innerHTML = html;
