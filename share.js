@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchAllRecipes() {
         try {
-            const response = await fetch('http://localhost:3000/api/recipes');
+            const response = await fetch('http://3.84.112.227:3000/api/recipes');
             const data = await response.json();
             const recipes = Array.isArray(data) ? data : data.recipes;
             renderRecipes(recipes);
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!query) return;
 
         try {
-            const response = await fetch(`http://localhost:3000/api/recipes/search?query=${encodeURIComponent(query)}`);
+            const response = await fetch(`http://3.84.112.227:3000/api/recipes/search?query=${encodeURIComponent(query)}`);
             const data = await response.json();
             const recipes = Array.isArray(data) ? data : data.recipes;
             renderRecipes(recipes);

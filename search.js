@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () { // loading document 
         if (!query) return;
 
         try {
-            const response = await fetch(`http://localhost:3000/api/recipes/search?query=${encodeURIComponent(query)}`);
+            const response = await fetch(`http://3.84.112.227:3000/api/recipes/search?query=${encodeURIComponent(query)}`);
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () { // loading document 
 
     document.getElementById('showAllBtn').addEventListener('click', async function () {
         try {
-            const response = await fetch('http://localhost:3000/api/recipes');
+            const response = await fetch('http://3.84.112.227:3000/api/recipes');
             const data = await response.json();
             const recipes = Array.isArray(data) ? data : data.recipes; // there we go again. I like this stuff!
             renderRecipes(recipes);

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() { //When page loads, ga
     const blogHolder = document.getElementById('blog-placeholder'); // when called by the html, render it
     if (blogHolder) blogHolder.innerHTML = renderedBlog;
 
-    fetch('http://localhost:3000/api/recipes/random/4') // fetch 4 random recipes for display in the featured recipes at the bottom
+    fetch('http://3.84.112.227:3000/api/recipes/random/4') // fetch 4 random recipes for display in the featured recipes at the bottom
       .then(response => response.json())
       .then(data => {
           const recipeList = data.map(recipe => ({ //create a list from the response using a map of recipe name, image, imageAlt, title and description
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() { //When page loads, ga
       });
 
  
-    fetch('http://localhost:3000/api/recipes/random/4') // this funtion is almost the same as above, but we are loading the recipes for the "slideshow display" at the top.
+    fetch('http://3.84.112.227:3000/api/recipes/random/4') // this funtion is almost the same as above, but we are loading the recipes for the "slideshow display" at the top.
       .then(response => response.json())
       .then(data => {
           const renderedSlideshow = Mustache.render(slideshowTemplate, { recipes: data }); // gotta love Mustache
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() { //When page loads, ga
         
 
 function showFullRecipe(recipeId) { // the function the whole site will use to display the recipes.
-    fetch(`http://localhost:3000/api/recipes/${recipeId}`) // grab the recipe using it's ID
+    fetch(`http://3.84.112.227:3000/api/recipes/${recipeId}`) // grab the recipe using it's ID
       .then(response => response.json())
       .then(recipe => {
 

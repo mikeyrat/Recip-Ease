@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => { // this mess is for the si
 
         try { // cuz this page had a lot of errors with timing and other stupid stuff and I had to do some trapping
             
-            const loginResponse = await fetch('http://localhost:3000/api/users/login', { //send username and pass
+            const loginResponse = await fetch('http://3.84.112.227:3000/api/users/login', { //send username and pass
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => { // this mess is for the si
             const userId = loginData.userId; // the above returns the users document id
             localStorage.setItem('userId', userId); // store that for later use all over the site
 
-            const userResponse = await fetch(`http://localhost:3000/api/users/${userId}`); // go back with the userdi and grab the username
+            const userResponse = await fetch(`http://3.84.112.227:3000/api/users/${userId}`); // go back with the userdi and grab the username
             const userData = await userResponse.json();
 
             if (!userResponse.ok || !userData.firstName) { // when login failed, we can't get first name (this code not used much due to other checks)
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => { // this mess is for the si
                 }
     
                 try {
-                    const response = await fetch('http://localhost:3000/api/users/register', { // if all good, add user to collection
+                    const response = await fetch('http://3.84.112.227:3000/api/users/register', { // if all good, add user to collection
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ username, email, password, firstName, lastName })
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => { // this mess is for the si
                 return;
             }
     
-        const response = await fetch(`http://localhost:3000/api/users/${userId}`);
+        const response = await fetch(`http://3.84.112.227:3000/api/users/${userId}`);
         const user = await response.json();
     
         const html = Mustache.render(accountInfoTemplate, user);
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => { // this mess is for the si
                     if (newPassword) body.password = newPassword;
     
                     try {
-                        const response = await fetch(`http://localhost:3000/api/users/${userId}`, { // change the document in the collection
+                        const response = await fetch(`http://3.84.112.227:3000/api/users/${userId}`, { // change the document in the collection
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(body)
