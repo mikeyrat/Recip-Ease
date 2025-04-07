@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express'); // framework for node.js
 const mongoose = require('mongoose'); // yeah, the DB!!
 const cors = require('cors'); // cross origin resource sharing - allow connection to the db without browsers hiccups
@@ -9,9 +10,9 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/recip_ease') //main db connection stored for use in all our routes
-    .then(() => console.log('Connected to MongoDB')) // just log it working... or not
-    .catch(err => console.error('MongoDB connection error:', err));
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 const db = mongoose.connection; //instantiate our connection as "db"
 const validCollections = ['recipes', 'dessert_ingredients', 'appetizer_ingredients', 'main_course_ingredients', 'users']; // we use this const in several routes
