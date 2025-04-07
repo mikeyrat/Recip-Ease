@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    sharedPageInit();
     var buttonData = {
         buttons: [
             { label: "Cup" },

@@ -9,12 +9,12 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
-<body>
+<body class="enter-page">
     <div class="main-container">
         <div id="mediaQueryMessage"></div> 
         <section class="leftCol">
-            <a href="/" title="Go to homepage">
-                <img src="/images/myrecipeslogo.png" alt="MyRecipEase Logo - Click to go to homepage" style="max-width: 100%;">
+           <a href="/" title="Go to homepage">
+                <img src="/images/myrecipeslogo.png" alt="MyRecipEase Logo - Click to go to homepage" style="max-width: 75%;">
             </a>
             <div id="navigation-placeholder"></div>
 			<div id="button-grid-placeholder"></div>
@@ -37,21 +37,42 @@
 			</form>
         </section>
         <section class="centerCol">
-            <h1 id="siteName">MyRecipEase</h1>
-			<h2 id="tagline">Finally... an easy way to enter, save, recall and share your favorite recipes!</h2>
+            <h1 id="enterSiteName">MyRecipEase - Create Recipe</h1>
+			<!-- <h2 id="tagline">Finally... an easy way to enter, save, recall and share your favorite recipes!</h2> -->
 			<div class="recipe-entry">
-				<form id="recipeForm">
-					<label for="recipeName">Recipe Name:</label>
-					<input type="text" id="recipeName" name="recipeName" placeholder="Enter recipe name">
-					
-					<label for="foodCategory">Food Category:</label>
-					<div id="foodCategoryDropdown"></div>
-			
-					<label for="dishType">Dish Type:</label>
-					<select id="dishType" name="dishType"></select>
-			
-					<button type="submit">Save Recipe Information</button>
-				</form>
+				<form id="recipeForm" class="recipe-entry-form">
+
+					<div class="form-row">
+					  <label for="recipeName">Recipe Name:</label>
+					  <input type="text" id="recipeName" name="recipeName">
+					</div>
+				  
+					<div class="form-row double">
+					  <div class="form-half">
+						<label for="foodCategory">Category</label>
+						<div id="foodCategoryDropdown"></div>
+					  </div>
+					  <div class="form-half">
+						<label for="dishType">Dish Type</label>
+						<select id="dishType" name="dishType"></select>
+					  </div>
+					</div>
+				  
+					<div class="form-row double">
+					  <div class="form-half">
+						<label for="description">Description</label>
+						<input type="text" id="description" name="description">
+					  </div>
+					  <div class="form-half">
+						<label for="servings">Servings</label>
+						<input type="text" id="servings" name="servings">
+					  </div>
+					</div>
+				  
+					<div class="form-row">
+					  <button class="recipe-entry" type="submit">Save Recipe Information</button>
+					</div>
+				  </form>
 			</div>
 			<div class="slideshow-mockup">
 				<p>Ingredient List<br>Will be added programatically to populate from MongoDB</p>
@@ -74,6 +95,7 @@
 	<div id="footer-placeholder"></div>
 	<script src="templates.js"></script>
 	<script src="commonjs.js"></script>
+	<script src="javascripts.js"></script>
 	<script src="enterPagejavascript.js"></script>	
 </body>
 </html>

@@ -54,6 +54,79 @@ section.leftCol img {
     align-items: center;
 }
 
+.enter-page section.centerCol {
+    max-width: 1000px;  /* or 1100px */
+}
+
+.enter-page .recipe-entry-form {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0;
+    background: none;
+    border: none;
+}
+
+.enter-page .form-half {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.enter-page .form-half input,
+.enter-page .form-half select,
+.enter-page #foodCategoryDropdown select {
+    padding: 5px 8px;
+    font-size: 14px;
+    line-height: 1.2;
+    width: 100%;
+}
+
+.enter-page .form-row button.recipe-entry {
+    width: 100%;
+    max-width: 900px;
+    font-size: 18px;
+    padding: 12px;
+}
+
+.enter-page .form-row {
+    margin-bottom: 8px;
+}
+
+.enter-page .form-half label {
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.enter-page select#foodCategory {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "Rockwell", monospace;
+    box-sizing: border-box;
+}
+
+.enter-page #foodCategoryDropdown {
+    width: 100%;
+    max-width: 100%;
+}
+
+.enter-page #foodCategoryDropdown select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "Rockwell", monospace;
+    box-sizing: border-box;
+}
+
+.enter-page select#dishType {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "Rockwell", monospace;
+    box-sizing: border-box;
+}
+
 .navigation ul {
     list-style-type: none;
     width: 200px; 
@@ -269,6 +342,19 @@ section.leftCol img {
     transition: background-color 0.3s;
 }
 
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* was 10+ */
+    margin-bottom: 6px; /* less vertical stacking */
+  }
+  
+  
+  .form-half label {
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+  
 .ingredient-form {
     margin-top: 20px;
     display: flex;
@@ -633,6 +719,19 @@ section.leftCol img {
     background-color: #edd5b2;
 }
 
+.recipe-entry-form {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
 .centerCol {
     display: flex;
     flex-direction: column;
@@ -819,3 +918,100 @@ input[type="password"] {
     opacity: 0.9;
     cursor: pointer;
   }
+
+  #enterSiteName {
+    font-size: 36px;              /* reduced from 84px */
+    margin: 0;
+    padding: 10px 0 0 0;          /* tighten space above */
+    text-align: center;
+    font-weight: bold;
+}
+
+.leftCol img {
+    max-width: 120px; /* or whatever size the other pages show */
+    height: auto;
+}
+
+.enter-page .form-row {
+    margin-bottom: 4px; /* down from 8 or 10 */
+    gap: 2px;           /* shrink spacing between label and input */
+  }
+
+.enter-page .form-row {
+    margin-bottom: 4px; /* down from 8 or 10 */
+    gap: 2px;           /* shrink spacing between label and input */
+  }
+
+.enter-page .form-half select,
+.enter-page #foodCategoryDropdown select {
+    width: 100% !important;
+}
+
+.enter-page .form-row.double {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.enter-page .form-row.double .form-half {
+    flex: 1;
+    min-width: 0;
+}
+
+.enter-page .form-half select,
+.enter-page #foodCategoryDropdown select {
+    width: 100% !important;
+    display: block;
+}
+
+.enter-page .form-row.double {
+    width: 100%;
+    max-width: 900px;
+}
+
+.enter-page .form-row {
+    margin-bottom: 2px;
+    gap: 0px;
+}
+
+.enter-page .form-half {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+.enter-page .form-half label {
+    font-size: 13px;
+    margin-bottom: 1px;
+    line-height: 1.1;
+}
+
+.enter-page .form-half input,
+.enter-page .form-half select,
+.enter-page #foodCategoryDropdown select {
+    padding: 4px 6px;
+    font-size: 14px;
+    line-height: 1.1;
+    height: auto;
+    min-height: 28px;
+    border: 1px solid #ccc;
+}
+
+.enter-page .form-row button.recipe-entry {
+    margin-top: 4px;
+    padding: 6px 10px;
+    font-size: 15px;
+}
+
+.enter-page select#dishType {
+    width: 100%;
+    padding: 4px 6px;
+    font-size: 14px;
+    line-height: 1.1;
+    height: auto;
+    min-height: 28px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}

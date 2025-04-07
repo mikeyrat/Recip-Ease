@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    sharedPageInit();
     const resultsContainer = document.getElementById('search-results-placeholder');
 
     function renderRecipes(recipes) {

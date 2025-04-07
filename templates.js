@@ -5,7 +5,7 @@ const navTemplate = `
             <li><a href="/search.html">Search</a></li>
             <li><a href="/enter.html">Enter</a></li>
             <li><a href="/share.html">Share</a></li>
-            <li><a href="/signin.html">Login/Sign Up</a></li>
+            <li><a href="/signin.html" id="login-nav-link">Login/Sign Up</a></li>
         </ul>
     </nav>`;
 
@@ -106,7 +106,11 @@ const recipeDetailTemplate = `
 <div class="recipe-detail">
     <div class="recipe-header">
         <h2>{{name}}</h2>
-        <p class="recipe-category"><strong>Category:</strong> {{category}} | <strong>Type:</strong> {{type}}</p>
+        <p class="recipe-category">
+            <strong>Category:</strong> {{category}} | 
+            <strong>Type:</strong> {{type}} | 
+            <strong>Servings:</strong> {{servings}}
+        </p>
     </div>
     
     <div class="recipe-image-container">

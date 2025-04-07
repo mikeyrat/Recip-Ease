@@ -17,6 +17,24 @@ document.addEventListener('DOMContentLoaded', function() { //When page loads, ga
         return; // do not continue loading recipes or slideshow
     }
 
+    const loginNavLink = document.getElementById('login-nav-link');
+        const userId = localStorage.getItem('userId');
+        if (loginNavLink && userId) {
+            fetch(`http://3.84.112.227:3000/api/users/${userId}`)
+                .then(res => res.json())
+                .then(user => {
+                    if (user && user.username) {
+                        loginNavLink.textContent = `Logged in as ${user.username}`;
+                        loginNavLink.href = '/signin.html'; // Still link to account page
+                    }
+                })
+                .catch(err => {
+                    console.error("Couldn't fetch user info for nav link:", err);
+                });
+        } else if (loginNavLink) {
+            loginNavLink.textContent = "Click to Sign In";
+        }
+
     var blogData = {  // future plans is this loads from real blogs via API
         blogItems: [
             {title: "Delicious Recipes", description: "Discover new flavors with our weekly picks. Simple and tasty!", url: "/blog/delicious-recipes"},
@@ -168,6 +186,7 @@ function showFullRecipe(recipeId) { // the function the whole site will use to d
           type: recipe.type,
           image: recipe.image || '/images/recipeaselogo.png',
           description: recipe.description || 'No description available.',
+          servings: recipe.servings || "N/A",
           ingredients: ingredientsList,
           instructions: recipe.instructions || []
         };

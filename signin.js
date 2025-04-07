@@ -1,4 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => { // this mess is for the signin page. And I thought it would be my easiest page LOL!
+    sharedPageInit();
+
+    const userId = localStorage.getItem('userId');
+if (userId) {
+    // Fetch user data to confirm and update the UI
+    fetch(`http://3.84.112.227:3000/api/users/${userId}`)
+        .then(res => res.json())
+        .then(user => {
+            if (user && user.firstName) {
+                document.getElementById('view-account').disabled = false;
+                document.getElementById('change-credentials').disabled = false;
+                document.getElementById('logout-container').style.display = 'flex';
+
+                const messageBox = document.getElementById('login-message');
+                messageBox.innerHTML = `
+                    <div class="ui-message info">
+                        Welcome back, ${user.firstName}!
+                    </div>
+                `;
+            }
+        })
+        .catch(err => {
+            console.error("Auto-login check failed:", err);
+        });
+}
 
     const loginForm = document.getElementById('login-form'); //call these forms to the webpage when it renders
     const messageBox = document.getElementById('login-message');
@@ -54,6 +79,8 @@ document.addEventListener('DOMContentLoaded', () => { // this mess is for the si
             console.error("Login error:", err);
             messageBox.innerHTML = `<p style="color: red;">Server error. Please try again later.</p>`;
         }
+
+        sharedPageInit();
     });
  
     document.getElementById('show-signup').addEventListener('click', () => {  // code for displaying the signup form if "Sign Up" clicked
@@ -250,6 +277,7 @@ document.addEventListener('DOMContentLoaded', () => { // this mess is for the si
         messageBox.innerHTML = `
             <div class="ui-message info">You have been logged out.</div>
         `;
+        sharedPageInit();
     });
     
     document.getElementById('view-account').disabled = true; //sets visibility on these when not needed.

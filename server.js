@@ -268,7 +268,7 @@ app.post('/api/users/login', async (req, res) => { //route to log in peeps
 
 app.post("/api/recipes/basicinfo", async (req, res) => { // route to store basic recipe document on entry page
   try {
-		const { name, category, type, description } = req.body; // only require basic info at first, build on ingredients and instuctions
+		const { name, category, type, description, servings } = req.body; // only require basic info at first, build on ingredients and instuctions
 
 		if (!name || !category || !type) { // need all the info bud
 		  return res.status(400).json({ error: "Missing required fields" });
@@ -284,6 +284,7 @@ app.post("/api/recipes/basicinfo", async (req, res) => { // route to store basic
 		  category,
 		  type,
 		  description: description || "",  // Default empty description
+          servings: servings || "",
 		  ingredients: {},  // Default empty object for ingredients
 		  instructions: [],  // Default empty array for instructions
 		  created_at: new Date(),
@@ -304,7 +305,7 @@ app.post("/api/recipes/basicinfo", async (req, res) => { // route to store basic
 
 app.post('/api/recipes', async (req, res) => { //may not use this one after all
     try {
-        const { user_id, name, category, type, ingredients, instructions, image } = req.body;
+        const { user_id, name, category, type, ingredients, instructions, image, servings, description } = req.body;
 
         if (!user_id || !name || !category || !type || !ingredients || !instructions) {
             return res.status(400).json({ error: "Missing required fields." });
@@ -334,6 +335,8 @@ app.post('/api/recipes', async (req, res) => { //may not use this one after all
             name,
             category,
             type,
+            description: description || "",  // Default empty description
+            servings: servings || "",
             ingredients,  
             instructions,
             created_at: timestamp,  
