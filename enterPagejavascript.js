@@ -1,4 +1,34 @@
 let currentUserId = null;
+let selectedIngredientName = null;
+let selectedIngredientUnits = {};
+
+document.addEventListener('DOMContentLoaded', function() {
+    const savedRecipeId = localStorage.getItem('currentRecipeId');
+    const savedBasics = localStorage.getItem('currentRecipeBasics');
+
+    if (savedBasics) {
+        const data = JSON.parse(savedBasics);
+        document.getElementById('recipeName').value = data.name || '';
+        document.getElementById('description').value = data.description || '';
+        document.getElementById('servings').value = data.servings || '';
+
+        // This part will fire the category/type dropdowns correctly
+        const foodCategorySelect = document.getElementById('foodCategory');
+        const dishTypeSelect = document.getElementById('dishType');
+
+        if (foodCategorySelect && dishTypeSelect) {
+            foodCategorySelect.value = data.category;
+            foodCategorySelect.dispatchEvent(new Event('change'));
+
+            // Slight delay to ensure dish types get populated
+            setTimeout(() => {
+                dishTypeSelect.value = data.type;
+            }, 200);
+        }
+
+        currentRecipeId = parseInt(savedRecipeId);
+    }
+});
 
 document.addEventListener('DOMContentLoaded', function() {
     sharedPageInit();
@@ -28,6 +58,19 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     var buttonGridRendered = Mustache.render(buttonGridTemplate, buttonData);
     document.getElementById('button-grid-placeholder').innerHTML = buttonGridRendered;
+    document.querySelectorAll('.button-grid button').forEach(button => {
+        button.addEventListener('click', () => {
+          if (!selectedIngredientName) {
+            alert("Please select an ingredient first.");
+            return;
+          }
+      
+          const unitLabel = button.textContent.replace(/\s+/g, ' ').trim(); // normalize label
+          selectedIngredientUnits[unitLabel] = (selectedIngredientUnits[unitLabel] || 0) + 1;
+      
+          console.log(`Unit selected: ${unitLabel} (${selectedIngredientUnits[unitLabel]})`);
+        });
+      });
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -124,6 +167,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (response.ok && result.recipe_id) {
                 currentRecipeId = result.recipe_id;
+                localStorage.setItem('currentRecipeId', currentRecipeId);
+                localStorage.setItem('currentRecipeBasics', JSON.stringify(recipeData));
                 alert(`Recipe saved! ID: ${currentRecipeId}`);
             } else {
                 throw new Error(result.error || 'Failed to save recipe');
@@ -135,4 +180,135 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function loadIngredients(category, type) {
+    const listContainer = document.getElementById('parsedIngredientsList');
+    if (!listContainer) return;
+  
+    if (!category || !type) {
+      listContainer.innerHTML = "<p>Please select both category and type.</p>";
+      return;
+    }
+  
+    fetch(`http://3.84.112.227:3000/api/${category}?types=${type}`)
+      .then(response => response.json())
+      .then(data => {
+        if (!data.ingredients || data.ingredients.length === 0) {
+          listContainer.innerHTML = "<p>No ingredients found for this selection.</p>";
+          return;
+        }
+  
+        // Sort by usage_count descending
+        const sortedIngredients = data.ingredients.sort((a, b) => (b.usage_count || 0) - (a.usage_count || 0));
+  
+        const ul = document.createElement('ul');
+        sortedIngredients.forEach(item => {
+            const li = document.createElement('li');
+          
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'ingredient-name';
+            nameSpan.textContent = item.ingredient;
+          
+            const actionsSpan = document.createElement('span');
+            actionsSpan.className = 'ingredient-actions';
+          
+            li.appendChild(nameSpan);
+            li.appendChild(actionsSpan);
+          
+            // Make entire row clickable
+            li.style.cursor = 'pointer';
+            li.title = 'Click to add quantity';
+          
+            li.addEventListener('click', () => {
+              selectIngredient(item.ingredient);
+            });
+          
+            ul.appendChild(li);
+          });
+  
+        listContainer.innerHTML = '';
+        listContainer.appendChild(ul);
+      })
+      .catch(err => {
+        console.error("Error fetching ingredients:", err);
+        listContainer.innerHTML = "<p>Error loading ingredients.</p>";
+      });
+  }
+
+  function selectIngredient(ingredientName) {
+    selectedIngredientName = ingredientName;
+    selectedIngredientUnits = {}; // reset the unit counts
+  
+    // Highlight the selected ingredient
+    document.querySelectorAll('.parsed-ingredients-list li').forEach(li => {
+      li.style.backgroundColor = '';
+    });
+  
+    const selectedLi = Array.from(document.querySelectorAll('.parsed-ingredients-list li'))
+      .find(li => li.textContent.includes(ingredientName));
+    if (selectedLi) {
+      selectedLi.style.backgroundColor = '#fff3dc';
+    }
+  
+    console.log(`Selected: ${ingredientName}`);
+  }
+  
+  
+  // Add event listener on both category and type selectors
+  document.addEventListener('DOMContentLoaded', () => {
+    const categorySelect = document.getElementById('foodCategory');
+    const typeSelect = document.getElementById('dishType');
+  
+    function tryLoadIngredients() {
+      const category = categorySelect.value;
+      const type = typeSelect.value;
+      if (category && type) {
+        loadIngredients(category, type);
+      }
+    }
+  
+    if (categorySelect && typeSelect) {
+      categorySelect.addEventListener('change', tryLoadIngredients);
+      typeSelect.addEventListener('change', tryLoadIngredients);
+    }
+  });
+  
+  document.querySelector('.ingredient-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+  
+    if (!selectedIngredientName || Object.keys(selectedIngredientUnits).length === 0) {
+      alert("Please select an ingredient and at least one unit.");
+      return;
+    }
+  
+    if (!currentRecipeId) {
+      alert("Please save recipe basics first.");
+      return;
+    }
+  
+    try {
+      const response = await fetch(`http://3.84.112.227:3000/api/recipes/${currentRecipeId}/ingredients`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: selectedIngredientName,
+          units: selectedIngredientUnits
+        })
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        alert(`Added ${selectedIngredientName} to recipe.`);
+        selectedIngredientName = null;
+        selectedIngredientUnits = {};
+        document.querySelectorAll('.parsed-ingredients-list li').forEach(li => li.style.backgroundColor = '');
+      } else {
+        throw new Error(result.error || "Failed to add ingredient");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error saving ingredient.");
+    }
+  });
+  
 

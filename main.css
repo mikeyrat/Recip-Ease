@@ -1015,3 +1015,42 @@ input[type="password"] {
     border: 1px solid #ccc;
     box-sizing: border-box;
 }
+
+.parsed-ingredients-list {
+    width: 100%;
+    max-width: 900px;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background-color: #fffef8;
+    padding: 10px;
+    font-family: "Rockwell", monospace;
+    font-size: 14px;
+    line-height: 1.2;
+    margin: 10px auto;
+  }
+  
+  .parsed-ingredients-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .parsed-ingredients-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px;
+    border-bottom: 1px dashed #ddd;
+  }
+  
+  .parsed-ingredients-list .ingredient-name {
+    flex: 1;
+    text-align: left;
+  }
+  
+  .parsed-ingredients-list .ingredient-actions {
+    flex-shrink: 0;
+    margin-left: 10px;
+  }
+  

@@ -425,26 +425,23 @@ app.put('/api/recipes/:id/ingredients', async (req, res) => { // add or update i
     try {
         const { id } = req.params; // gotta have recipe id
         const docId = parseInt(id);  // gotta be int
-        const { name, quantity, unit } = req.body; // gotta have all this stuff
+        const { name, units } = req.body;
 
-        if (!name || quantity === undefined || !unit) { // gotta have it all bro or you dont go
-            return res.status(400).json({ error: "Ingredient name, quantity, and unit are required." });
+        if (!name || !units || typeof units !== 'object') {
+            return res.status(400).json({ error: "Ingredient name and valid units object are required." });
         }
 
-        if (!validUnits.has(unit)) { //validUnits from above the first route
-            return res.status(400).json({ error: `Invalid unit. Accepted units: ${[...validUnits].join(", ")}` });
+        // Validate unit keys
+        for (const unitKey of Object.keys(units)) {
+            if (!validUnits.has(unitKey)) {
+                return res.status(400).json({ error: `Invalid unit: ${unitKey}. Allowed units are: ${[...validUnits].join(", ")}` });
+            }
         }
 
-        const collection = mongoose.connection.collection('recipes');
-
-        const recipe = await collection.findOne({ _id: docId }); // first check to see if you have the recipe
-        if (!recipe) { // no recipe no PUT
-            return res.status(404).json({ error: "Recipe not found." });
-        }
-
-        const result = await collection.updateOne( // all good, so PUT
+        // Store it
+        const result = await collection.updateOne(
             { _id: docId },
-            { $set: { [`ingredients.${name}`]: { quantity, unit } } }
+            { $set: { [`ingredients.${name}`]: { units } } }
         );
 
         if (result.matchedCount === 0) { // thought we'd been here, but check again for like error checking
