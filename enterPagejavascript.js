@@ -1,5 +1,15 @@
+let currentUserId = null;
+
 document.addEventListener('DOMContentLoaded', function() {
     sharedPageInit();
+
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+        currentUserId = parseInt(storedUserId);
+    } else {
+        alert("You must be signed in to create a recipe.");
+        window.location.href = "/signin.html"; 
+    }
     var buttonData = {
         buttons: [
             { label: "Cup" },
@@ -40,41 +50,89 @@ document.addEventListener('DOMContentLoaded', function() {
             var dishTypeSelect = document.getElementById('dishType');
             dishTypeSelect.innerHTML = ''; 
 
+             var normalized = category.replace('_ingredients', '').replace('main_course', 'maincourses');
+
             var dishes = {
-            desserts: [
-                { value: "cake", name: "Cake" },
-                { value: "pie", name: "Pie" },
-                { value: "pudding", name: "Pudding" },
-                { value: "icecream", name: "Ice Cream" },
-                { value: "cookies", name: "Cookies" },
-                { value: "sweetbreads", name: "Sweet Breads" }
-            ],
-            appetizers: [
-                { value: "fingerfoods", name: "Finger Foods" },
-                { value: "dips", name: "Dips & Spreads" },
-                { value: "wings", name: "Wings & Things" }
-            ],
-            maincourses: [
-                { value: "beef", name: "Beef" },
-                { value: "chicken", name: "Chicken" },
-                { value: "casseroles", name: "Casseroles" },
-                { value: "soups", name: "Soups" },
-                { value: "pork", name: "Pork" },
-                { value: "vegetarian", name: "Vegetarian" }
-            ]
+                dessert: [
+                    { value: "cake", name: "Cake" },
+                    { value: "pie", name: "Pie" },
+                    { value: "pudding", name: "Pudding" },
+                    { value: "icecream", name: "Ice Cream" },
+                    { value: "cookies", name: "Cookies" },
+                    { value: "sweetbreads", name: "Sweet Breads" }
+                ],
+                appetizer: [
+                    { value: "fingerfoods", name: "Finger Foods" },
+                    { value: "dips", name: "Dips & Spreads" },
+                    { value: "wings", name: "Wings & Things" }
+                ],
+                maincourses: [
+                    { value: "beef", name: "Beef" },
+                    { value: "chicken", name: "Chicken" },
+                    { value: "casseroles", name: "Casseroles" },
+                    { value: "soups", name: "Soups" },
+                    { value: "pork", name: "Pork" },
+                    { value: "vegetarian", name: "Vegetarian" }
+                ]
         };
 
-            if (dishes[category]) {
-                dishes[category].forEach(function(dish) {
-                    var option = document.createElement('option');
-                    option.value = dish.toLowerCase();
-                    option.textContent = dish;
-                    dishTypeSelect.appendChild(option);
-                });
+        if (dishes[normalized]) {
+            dishes[normalized].forEach(function(dish) {
+                var option = document.createElement('option');
+                option.value = dish.value;
+                option.textContent = dish.name;
+                dishTypeSelect.appendChild(option);
+            });
             }
         });
-    } else {
-        console.error('foodCategory select box not found');
     }
 });
+
+let currentRecipeId = null; // store for later use (ingredients, instructions)
+
+document.addEventListener('DOMContentLoaded', function () {
+    const recipeForm = document.getElementById('recipeForm');
+
+    recipeForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const recipeData = {
+            name: document.getElementById('recipeName').value.trim(),
+            category: document.getElementById('foodCategory').value.trim(),
+            type: document.getElementById('dishType').value.trim(),
+            description: document.getElementById('description').value.trim(),
+            servings: document.getElementById('servings').value.trim(),
+            user_id: currentUserId
+        };
+
+        // Basic validation
+        if (!recipeData.name || !recipeData.category || !recipeData.type) {
+            alert("Please fill in the required fields: name, category, and type.");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://3.84.112.227:3000/api/recipes/basicinfo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(recipeData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.recipe_id) {
+                currentRecipeId = result.recipe_id;
+                alert(`Recipe saved! ID: ${currentRecipeId}`);
+            } else {
+                throw new Error(result.error || 'Failed to save recipe');
+            }
+        } catch (err) {
+            console.error('Save failed:', err);
+            alert('Error saving recipe. Please try again.');
+        }
+    });
+});
+
 

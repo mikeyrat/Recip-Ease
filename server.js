@@ -261,6 +261,7 @@ app.post('/api/users/login', async (req, res) => { //route to log in peeps
         }
 
         res.json({ message: "Login successful", userId: user._id }); // yay 
+        localStorage.setItem('userId', result.userId);
     } catch (err) {
         console.error("Login error:", err);
         res.status(500).json({ error: err.message });
@@ -269,7 +270,11 @@ app.post('/api/users/login', async (req, res) => { //route to log in peeps
 
 app.post("/api/recipes/basicinfo", async (req, res) => { // route to store basic recipe document on entry page
   try {
-		const { name, category, type, description, servings } = req.body; // only require basic info at first, build on ingredients and instuctions
+		const { name, category, type, description, servings, user_id } = req.body; // only require basic info at first, build on ingredients and instuctions
+
+        if (!user_id || isNaN(user_id)) {
+            return res.status(400).json({ error: "Valid user_id is required." });
+        }
 
 		if (!name || !category || !type) { // need all the info bud
 		  return res.status(400).json({ error: "Missing required fields" });
@@ -280,7 +285,7 @@ app.post("/api/recipes/basicinfo", async (req, res) => { // route to store basic
 
 		const newRecipe = { // build payload
 		  _id: newRecipeId,
-		  user_id: 1,  
+		  user_id: parseInt(user_id),  
 		  name,
 		  category,
 		  type,
