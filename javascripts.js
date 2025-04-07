@@ -1,4 +1,22 @@
+
 document.addEventListener('DOMContentLoaded', function() { //When page loads, gather the data for the blog entries on the left side Nav bar. 
+    if (window.location.pathname.endsWith('siteinfo.html')) {
+        const nav = document.getElementById('navigation-placeholder');
+        const footer = document.getElementById('footer-placeholder');
+        const content = document.querySelector('.centerCol'); // match working layout
+
+        if (nav) nav.innerHTML = navTemplate;
+        if (footer) footer.innerHTML = footerTemplate;
+
+        if (content) {
+            content.innerHTML += `
+                
+            `;
+        }
+
+        return; // do not continue loading recipes or slideshow
+    }
+
     var blogData = {  // future plans is this loads from real blogs via API
         blogItems: [
             {title: "Delicious Recipes", description: "Discover new flavors with our weekly picks. Simple and tasty!", url: "/blog/delicious-recipes"},
@@ -197,4 +215,32 @@ function showFullRecipe(recipeId) { // the function the whole site will use to d
             console.error("Error loading recipe:", err);
         });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.location.pathname.endsWith('siteinfo.html')) {
+        // Load nav and layout
+        const leftCol = document.getElementById('left-column');
+        const rightCol = document.getElementById('right-column');
+        const footer = document.getElementById('footer');
+        const centerCol = document.getElementById('center-column');
+
+        if (leftCol) leftCol.innerHTML = leftnavTemplate;
+        if (rightCol) rightCol.innerHTML = rightcolumnTemplate;
+        if (footer) footer.innerHTML = footerTemplate;
+
+        if (centerCol) {
+            centerCol.innerHTML = `
+                <h2 id="privacy">Privacy Policy</h2>
+                <p>Your privacy is important to us. MyRecipEase does not sell, trade, or rent your personal information to others. We collect only the data necessary to support recipe sharing and user account functionality, such as your username, email address, and saved recipe data.</p>
+
+                <h2 id="terms">Terms of Use</h2>
+                <p>By using MyRecipEase, you agree to use the site responsibly and respectfully. You may not upload offensive content or attempt to access user data not associated with your account. We reserve the right to suspend or delete accounts that violate these terms. MyRecipEase is provided "as-is" without warranties of any kind.</p>
+
+                <h2 id="contact">Contact Us</h2>
+                <p>Email: <a href="mailto:mikeyratf@gmail.com">mikeyratf@gmail.com</a><br>
+                   Phone: (555) 123-4567</p>
+            `;
+        }
+    }
+});
 
