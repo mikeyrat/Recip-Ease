@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
           }
       
-          const unitLabel = button.textContent.replace(/\s+/g, ' ').trim(); // normalize label
+          const unitLabel = button.innerHTML.replace(/<br\s*\/?>/gi, ' ').trim();
           selectedIngredientUnits[unitLabel] = (selectedIngredientUnits[unitLabel] || 0) + 1;
       
           console.log(`Unit selected: ${unitLabel} (${selectedIngredientUnits[unitLabel]})`);
