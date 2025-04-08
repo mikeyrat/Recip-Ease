@@ -21,11 +21,12 @@ const validIngredientCollections = [ // this is just the ingredients collections
     "appetizer_ingredients",
     "main_course_ingredients"
 ];
-const validUnits = new Set([ // list of quantities so when recipes are entered only these will work.
-    "Cup", "1/2<br>Cup", "1/4<br>Cup", "1/3<br>Cup",
-    "TBSP", "1/2<br>TBSP", "TSP", "1/2<br>TSP",
+const validUnits = new Set([
+    "Cup", "1/2 Cup", "1/4 Cup", "1/3 Cup",
+    "TBSP", "1/2 TBSP", "TSP", "1/2 TSP",
     "Oz.", "Gms.", "Qty", "Other"
-]);
+  ]);
+  
 
 db.once('open', () => console.log('Connected to MongoDB')); //establist the MongoDB connection
 
