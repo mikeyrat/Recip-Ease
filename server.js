@@ -422,39 +422,47 @@ app.put('/api/users/:id', async (req, res) => { // change user email or password
     }
 });
 
-app.put('/api/recipes/:id/ingredients', async (req, res) => { // add or update ingredients to recipe document
+app.put('/api/recipes/:id/ingredients', async (req, res) => {
     try {
-        const { id } = req.params; // gotta have recipe id
-        const docId = parseInt(id);  // gotta be int
-        const { name, units } = req.body;
-
-        if (!name || !units || typeof units !== 'object') {
-            return res.status(400).json({ error: "Ingredient name and valid units object are required." });
+      const { id } = req.params;
+      const docId = parseInt(id);
+      const { name, units, divided } = req.body;
+  
+      if (!name || !units || typeof units !== 'object') {
+        return res.status(400).json({ error: "Ingredient name and valid units object are required." });
+      }
+  
+      // Validate unit keys
+      for (const unitKey of Object.keys(units)) {
+        if (!validUnits.has(unitKey)) {
+          return res.status(400).json({ error: `Invalid unit: ${unitKey}. Allowed units are: ${[...validUnits].join(", ")}` });
         }
-
-        // Validate unit keys
-        for (const unitKey of Object.keys(units)) {
-            if (!validUnits.has(unitKey)) {
-                return res.status(400).json({ error: `Invalid unit: ${unitKey}. Allowed units are: ${[...validUnits].join(", ")}` });
-            }
-        }
-        const collection = mongoose.connection.collection('recipes');
-        // Store it
-        const result = await collection.updateOne(
-            { _id: docId },
-            { $set: { [`ingredients.${name}`]: { units } } }
-        );
-
-        if (result.matchedCount === 0) { // thought we'd been here, but check again for like error checking
-            return res.status(404).json({ error: "Recipe not found." });
-        }
-
-        res.json({ message: "Ingredient added/updated successfully", modifiedCount: result.modifiedCount }); //yay
+      }
+  
+      const collection = mongoose.connection.collection('recipes');
+  
+      // Build the ingredient object to store
+      const ingredientData = { units };
+      if (divided === true) {
+        ingredientData.divided = true;
+      }
+  
+      const result = await collection.updateOne(
+        { _id: docId },
+        { $set: { [`ingredients.${name}`]: ingredientData } }
+      );
+  
+      if (result.matchedCount === 0) {
+        return res.status(404).json({ error: "Recipe not found." });
+      }
+  
+      res.json({ message: "Ingredient added/updated successfully", modifiedCount: result.modifiedCount });
     } catch (err) {
-        console.error("Error updating ingredient:", err);  /// troubleshooting delete later
-        res.status(500).json({ error: err.message });
+      console.error("Error updating ingredient:", err);
+      res.status(500).json({ error: err.message });
     }
-});
+  });
+  
 
 app.put('/api/recipes/:id/instructions', async (req, res) => { // PUT for adding - updating instructions in a recipe
     try {

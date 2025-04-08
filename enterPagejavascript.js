@@ -2,33 +2,64 @@ let currentUserId = null;
 let selectedIngredientName = null;
 let selectedIngredientUnits = {};
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+  // Wait a short moment for the dropdown template to finish rendering
+  setTimeout(() => {
     const savedRecipeId = localStorage.getItem('currentRecipeId');
     const savedBasics = localStorage.getItem('currentRecipeBasics');
 
     if (savedBasics) {
-        const data = JSON.parse(savedBasics);
-        document.getElementById('recipeName').value = data.name || '';
-        document.getElementById('description').value = data.description || '';
-        document.getElementById('servings').value = data.servings || '';
+      const data = JSON.parse(savedBasics);
 
-        // This part will fire the category/type dropdowns correctly
-        const foodCategorySelect = document.getElementById('foodCategory');
-        const dishTypeSelect = document.getElementById('dishType');
+      // Set text fields
+      document.getElementById('recipeName').value = data.name || '';
+      document.getElementById('description').value = data.description || '';
+      document.getElementById('servings').value = data.servings || '';
 
-        if (foodCategorySelect && dishTypeSelect) {
-            foodCategorySelect.value = data.category;
-            foodCategorySelect.dispatchEvent(new Event('change'));
+      // Get the newly-rendered selects
+      const foodCategorySelect = document.getElementById('foodCategory');
+      const dishTypeSelect = document.getElementById('dishType');
 
-            // Slight delay to ensure dish types get populated
-            setTimeout(() => {
-                dishTypeSelect.value = data.type;
-            }, 200);
+      if (foodCategorySelect) {
+        foodCategorySelect.value = data.category;
+        foodCategorySelect.dispatchEvent(new Event('change'));
+      }
+
+      // Delay setting dish type until options are available
+      let retries = 0;
+      const interval = setInterval(() => {
+        const dishTypeSelect = document.getElementById('dishType'); // refresh reference
+        const optionExists = dishTypeSelect && Array.from(dishTypeSelect.options).some(
+          opt => opt.value === data.type
+        );
+        if (optionExists || retries > 10) {
+          if (dishTypeSelect) {
+            dishTypeSelect.value = data.type;
+          }
+          clearInterval(interval);
         }
+        retries++;
+      }, 100);
 
-        currentRecipeId = parseInt(savedRecipeId);
+      currentRecipeId = parseInt(savedRecipeId);
+      if (currentRecipeId) {
+        renderEnteredInstructions(currentRecipeId);
+        renderEnteredIngredients(currentRecipeId).then(addedIngredients => {
+          // Remove used ingredients from the suggestion list
+          document.querySelectorAll('.parsed-ingredients-list li').forEach(li => {
+            const text = li.textContent.trim().toLowerCase();
+            addedIngredients.forEach(name => {
+              if (text.includes(name.toLowerCase())) {
+                li.remove();
+              }
+            });
+          });
+        });
+      }
     }
+  }, 200); // Delay start until template is rendered
 });
+
 
 document.addEventListener('DOMContentLoaded', function() {
     sharedPageInit();
@@ -169,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 currentRecipeId = result.recipe_id;
                 localStorage.setItem('currentRecipeId', currentRecipeId);
                 localStorage.setItem('currentRecipeBasics', JSON.stringify(recipeData));
-                alert(`Recipe saved! ID: ${currentRecipeId}`);
+                //alert(`Recipe saved! ID: ${currentRecipeId}`);
             } else {
                 throw new Error(result.error || 'Failed to save recipe');
             }
@@ -286,22 +317,38 @@ function loadIngredients(category, type) {
     }
   
     try {
+      const isDivided = document.getElementById('dividedCheckbox')?.checked || false;
+
       const response = await fetch(`http://3.84.112.227:3000/api/recipes/${currentRecipeId}/ingredients`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: selectedIngredientName,
-          units: selectedIngredientUnits
+          units: selectedIngredientUnits,
+          divided: isDivided
         })
       });
+
   
       const result = await response.json();
   
       if (response.ok) {
-        alert(`Added ${selectedIngredientName} to recipe.`);
+        // alert(`Added ${selectedIngredientName} to recipe.`);
         selectedIngredientName = null;
         selectedIngredientUnits = {};
         document.querySelectorAll('.parsed-ingredients-list li').forEach(li => li.style.backgroundColor = '');
+      
+        // Refresh list
+        const addedIngredients = await renderEnteredIngredients(currentRecipeId);
+
+        document.querySelector('#parsedIngredientsList ul')?.querySelectorAll('li')?.forEach(li => {
+          const text = li.textContent.trim().toLowerCase();
+          addedIngredients.forEach(name => {
+            if (text.includes(name.toLowerCase())) {
+              li.remove();
+            }
+          });
+        });
       } else {
         throw new Error(result.error || "Failed to add ingredient");
       }
@@ -310,5 +357,224 @@ function loadIngredients(category, type) {
       alert("Error saving ingredient.");
     }
   });
+
+  document.querySelector('.instructions-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+  
+    const textarea = document.getElementById('instructions');
+    const stepText = textarea.value.trim();
+  
+    if (!stepText) {
+      alert("Please enter some instruction text.");
+      return;
+    }
+  
+    if (!currentRecipeId) {
+      alert("Please save recipe basics first.");
+      return;
+    }
+  
+    try {
+      const response = await fetch(`http://3.84.112.227:3000/api/recipes/${currentRecipeId}/instructions`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ push: { instructions: stepText } })
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        textarea.value = '';
+        await renderEnteredInstructions(currentRecipeId);
+      } else {
+        throw new Error(result.error || "Failed to add instruction.");
+      }
+    } catch (err) {
+      console.error("Error saving instruction:", err);
+      alert("Failed to save instruction.");
+    }
+  });
+  
+
+  async function renderEnteredIngredients(recipeId) {
+    recipeId = parseInt(recipeId);
+    try {
+      const response = await fetch(`http://3.84.112.227:3000/api/recipes/${recipeId}`);
+      const recipe = await response.json();
+  
+      if (!recipe || !recipe.ingredients || Object.keys(recipe.ingredients).length === 0) {
+        console.log("No ingredients to display.");
+        const container = document.getElementById('entered-ingredients');
+        if (container) container.innerHTML = "<p>No ingredients added yet.</p>";
+        return [];
+      }
+  
+      const lines = formatIngredients(recipe.ingredients);
+      const container = document.getElementById('entered-ingredients');
+      if (!container) return [];
+  
+      const ul = document.createElement('ul');
+      lines.forEach(line => {
+        const li = document.createElement('li');
+        li.textContent = line;
+        li.style.cursor = 'pointer';
+        li.title = 'Click to interact (future use)';
+        li.addEventListener('click', () => {
+          console.log(`Clicked entered ingredient: ${line}`);
+        });
+        ul.appendChild(li);
+      });
+  
+      container.innerHTML = '';
+      container.appendChild(ul);
+  
+      return Object.keys(recipe.ingredients); // return names for cross-filtering
+    } catch (err) {
+      console.error("Error loading entered ingredients:", err);
+      return [];
+    }
+  }
+
+  async function renderEnteredInstructions(recipeId) {
+    try {
+      const response = await fetch(`http://3.84.112.227:3000/api/recipes/${recipeId}`);
+      const recipe = await response.json();
+  
+      const container = document.getElementById('entered-instructions');
+      if (!container) return;
+  
+      if (!recipe.instructions || recipe.instructions.length === 0) {
+        container.innerHTML = "<p>No instructions added yet.</p>";
+        return;
+      }
+  
+      const ol = document.createElement('ol');
+      recipe.instructions.forEach((step, index) => {
+        const li = document.createElement('li');
+        li.textContent = step;
+        li.style.cursor = 'pointer';
+        li.title = 'Click to edit or remove (future)';
+        ol.appendChild(li);
+      });
+  
+      container.innerHTML = '';
+      container.appendChild(ol);
+    } catch (err) {
+      console.error("Error loading instructions:", err);
+    }
+  }
+
+  document.getElementById('saveRecipeBtn').addEventListener('click', async () => {
+    if (!currentRecipeId) {
+      alert("No recipe to save.");
+      return;
+    }
+  
+    // Fetch the recipe to get its ingredients
+    try {
+      const response = await fetch(`http://3.84.112.227:3000/api/recipes/${currentRecipeId}`);
+      const recipe = await response.json();
+  
+      if (!recipe || !recipe.ingredients) {
+        alert("No ingredients to finalize.");
+        return;
+      }
+  
+      const ingredientNames = Object.keys(recipe.ingredients || {});
+      const collection = recipe.category || 'unknown';
+  
+      // Increment usage count for each ingredient
+      for (const ingredient of ingredientNames) {
+        const safeIngredient = encodeURIComponent(ingredient);
+        const safeCollection = encodeURIComponent(collection);
+        await fetch(`http://3.84.112.227:3000/api/${safeCollection}/${safeIngredient}/increment`, {
+          method: 'PUT'
+        });
+      }
+  
+      alert("Recipe saved!");
+  
+      // Clear form fields
+      document.getElementById('recipeName').value = '';
+      document.getElementById('description').value = '';
+      document.getElementById('servings').value = '';
+      document.getElementById('foodCategory').value = '';
+      document.getElementById('dishType').innerHTML = '';
+  
+      // Clear selected state
+      selectedIngredientName = null;
+      selectedIngredientUnits = {};
+      currentRecipeId = null;
+  
+      // Clear local storage
+      localStorage.removeItem('currentRecipeId');
+      localStorage.removeItem('currentRecipeBasics');
+  
+      // Clear lists
+      document.getElementById('parsedIngredientsList').innerHTML = '';
+      document.getElementById('entered-ingredients').innerHTML = '';
+      document.getElementById('entered-instructions').innerHTML = '';
+  
+    } catch (err) {
+      console.error("Error finalizing recipe:", err);
+      alert("Something went wrong while saving.");
+    }
+  });
+
+  document.getElementById('cancel-button').addEventListener('click', async () => {
+    if (!currentRecipeId) {
+      alert("No saved recipe to delete.");
+      return;
+    }
+  
+    const confirm1 = confirm("Are you sure you want to cancel and delete this recipe?");
+    if (!confirm1) return;
+  
+    const confirm2 = prompt('Please type "delete recipe" to confirm:');
+    if (confirm2?.toLowerCase() !== "delete recipe") {
+      alert("Recipe NOT deleted. Confirmation failed.");
+      return;
+    }
+  
+    try {
+      const response = await fetch(`http://3.84.112.227:3000/api/recipes/${currentRecipeId}`, {
+        method: 'DELETE'
+      });
+  
+      if (!response.ok) {
+        throw new Error("Server rejected the deletion.");
+      }
+  
+      alert("Recipe deleted successfully.");
+  
+      // Clear all form fields
+      document.getElementById('recipeName').value = '';
+      document.getElementById('description').value = '';
+      document.getElementById('servings').value = '';
+      document.getElementById('foodCategory').value = '';
+      document.getElementById('dishType').innerHTML = '';
+  
+      // Clear state
+      selectedIngredientName = null;
+      selectedIngredientUnits = {};
+      currentRecipeId = null;
+  
+      // Clear local storage
+      localStorage.removeItem('currentRecipeId');
+      localStorage.removeItem('currentRecipeBasics');
+  
+      // Clear ingredient and instruction lists
+      document.getElementById('parsedIngredientsList').innerHTML = '';
+      document.getElementById('entered-ingredients').innerHTML = '';
+      document.getElementById('entered-instructions').innerHTML = '';
+  
+    } catch (err) {
+      console.error("Error deleting recipe:", err);
+      alert("An error occurred while deleting the recipe.");
+    }
+  });
+  
+  
+  
   
 

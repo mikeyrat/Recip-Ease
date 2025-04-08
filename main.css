@@ -1016,7 +1016,12 @@ input[type="password"] {
     box-sizing: border-box;
 }
 
-.parsed-ingredients-list {
+#entered-ingredients {
+    padding: 0;
+    margin: 0;
+  }
+
+.parsed-ingredients-list, .entered-ingredients-list {
     width: 100%;
     max-width: 900px;
     max-height: 300px;
@@ -1024,10 +1029,12 @@ input[type="password"] {
     border: 1px solid #ccc;
     background-color: #fffef8;
     padding: 10px;
-    font-family: "Rockwell", monospace;
+    font-family: "Courier New", Courier, monospace;
     font-size: 14px;
     line-height: 1.2;
     margin: 10px auto;
+    font-weight: bold;
+    white-space: pre;
   }
   
   .parsed-ingredients-list ul {
@@ -1036,7 +1043,8 @@ input[type="password"] {
     margin: 0;
   }
   
-  .parsed-ingredients-list li {
+  .parsed-ingredients-list li,
+  .entered-ingredients-list li {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1053,4 +1061,14 @@ input[type="password"] {
     flex-shrink: 0;
     margin-left: 10px;
   }
-  
+
+  #entered-ingredients li:hover {
+    background-color: #fff3dc;
+    transition: background-color 0.2s ease;
+  }  
+
+
+  li.already-added {
+    background-color: #cbe3c0 !important; /* light green */
+  }
+

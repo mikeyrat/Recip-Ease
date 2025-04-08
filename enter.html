@@ -33,7 +33,7 @@
 				<h4>Enter Instructions By Step</h4>
 				<textarea id="instructions" name="instructions" placeholder="Enter instructions for this step" rows="4"></textarea>
 				<button type="submit">Submit Step</button>
-				<button type="Cancel">Undo Last Submission</button>
+				<button type="Cancel">Cancel</button>
 			</form>
         </section>
         <section class="centerCol">
@@ -77,14 +77,14 @@
 			<div class="parsed-ingredients-list" id="parsedIngredientsList">
 				<!-- Ingredient list gets inserted here -->
 			  </div>
-			<h2>Entered Ingredients</h2>
-			<div class="slideshow-mockup">
-				<p>Recipe Ingredients and Steps<br>Functionality will be added programatically on full website</p>
-			</div>
-			<div class="closeout-buttons">
-				<button id="cancel-button" type="submit">Clear Form</button>
-				<button type="submit">Save Recipe</button>
-			</div>
+			  <h2>Entered Ingredients</h2>
+			  <div id="entered-ingredients" class="entered-ingredients-list"></div>
+			  <h2>Entered Instructions</h2>
+				<div id="entered-instructions" class="entered-ingredients-list"></div>
+				<div class="closeout-buttons">
+					<button id="cancel-button" type="button">Clear Form</button>
+					<button id="saveRecipeBtn" type="button">Save Recipe</button>
+				  </div>
         </section>
         <section class="rightCol"> 
             <div class="ad-display">

@@ -115,151 +115,117 @@ document.addEventListener('DOMContentLoaded', function() { //When page loads, ga
 });
         
 
-function showFullRecipe(recipeId) { // the function the whole site will use to display the recipes.
-    fetch(`http://3.84.112.227:3000/api/recipes/${recipeId}`) // grab the recipe using it's ID
+function showFullRecipe(recipeId) {
+    fetch(`http://3.84.112.227:3000/api/recipes/${recipeId}`)
       .then(response => response.json())
       .then(recipe => {
-
-        function combineUnits(units) {  // tough part here. We need to convert data like "Flour": "Quantity": [ {"Cup": 2}, {"1/2 Cup": 1}] or some such into "2-1/2 Cups Flour" for display
-          const result = {};
-          for (const [unit, count] of Object.entries(units)) {
-              const match = unit.match(/^(\d\/\d) (.+)$/); // first discern whether a unit is a whole number (Cup) or a fraction (1/2 Cup)
-              if (match) {
-                  const fraction = match[1];
-                  const baseUnit = match[2];
-
-                  const fracMap = { // quick map to convert fractions to decimals
-                      "1/4": 0.25,
-                      "1/3": 0.33,
-                      "1/2": 0.5,
-                      "3/4": 0.75
-                  };
-
-                  const fracValue = fracMap[fraction];
-                  if (!fracValue) continue;
-
-                  if (!result[baseUnit]) result[baseUnit] = 0; // if no whole cups, then move on
-                  result[baseUnit] += fracValue * count; // add the fractions to the whole if any
-              } else {
-                  if (!result[unit]) result[unit] = 0;
-                  result[unit] += count;
-              }
-          }
-          return result; // All of the above was to add various fractions like 3/4 cup to whole cups to combine different measures into one "measure"
-        }
-
-        function formatQuantity(qty) { //now we go backwards to make the display read right.
-          const whole = Math.floor(qty);
-          const fraction = +(qty - whole).toFixed(2);
-
-          const fracMap = { //mapping back from 2.5 cups to be 2-1/2 cups
-            0.25: '1/4',
-            0.33: '1/3',
-            0.34: '1/3',
-            0.5:  '1/2',
-            0.75: '3/4'
-          };
-
-          const parts = [];
-          if (whole > 0) parts.push(`${whole}`); 
-          if (fracMap[fraction]) parts.push(fracMap[fraction]);
-
-          return parts.join(' + ') || qty.toString();// the whole units and the fractions are combined here
-        }
-
-        const ingredientsList = []; //create a array list to prepare the ingredients for display
-        for (const [ingredientName, ingredientData] of Object.entries(recipe.ingredients || {})) {
-          const combined = combineUnits(ingredientData.units || {}); // call the function to combine the ingredient units from "Quantity": [ {"Cup": 2}, {"1/2 Cup": 1}] to "Cups: 2.5"
-          const parts = [];
-
-          for (const [unit, qty] of Object.entries(combined)) {
-            parts.push(`${formatQuantity(qty)} ${unit}`); //Converts "Cups: 2.5" to "2-1/2 Cups" for display in the recipes which is how cooks expect to read it
-          }
-
-          const line = `${parts.join(' + ').padEnd(20, ' ')} ${ingredientName}`; //display each line
-          ingredientsList.push(line);
-        }
-
-        const recipeData = { // variable that holds the recipe data any time it is gathered from database or input from user on enter page
+        const recipeData = {
           name: recipe.name,
           category: recipe.category,
           type: recipe.type,
           image: recipe.image || '/images/recipeaselogo.png',
           description: recipe.description || 'No description available.',
           servings: recipe.servings || "N/A",
-          ingredients: ingredientsList,
+          ingredients: formatIngredients(recipe.ingredients || {}),
           instructions: recipe.instructions || []
         };
-
-        const rendered = Mustache.render(recipeDetailTemplate, recipeData); // load the Mustache template
-        const fullPanel = document.getElementById('full-recipe-view'); // where the recipe will be shown
-
+  
+        const rendered = Mustache.render(recipeDetailTemplate, recipeData);
+        const fullPanel = document.getElementById('full-recipe-view');
+  
         if (!fullPanel) {
-            console.error("Missing #full-recipe-view container");
-            return;
+          console.error("Missing #full-recipe-view container");
+          return;
         }
-
+  
         fullPanel.innerHTML = rendered;
-
-        // Toggle visibility to hide either featured recipes or search results
-        const recipeBlock = document.getElementById('recipe-placeholder'); // used on index.html
-        const searchBlock = document.getElementById('search-results-placeholder'); // used on search.html
-
+  
+        const recipeBlock = document.getElementById('recipe-placeholder');
+        const searchBlock = document.getElementById('search-results-placeholder');
+  
         if (recipeBlock && recipeBlock.style) recipeBlock.style.display = 'none';
         if (searchBlock && searchBlock.style) searchBlock.style.display = 'none';
         fullPanel.style.display = 'block';
+  
         const resultsHeader = document.getElementById('results-header');
         const featuredHeader = document.getElementById('featured-header');
-
+  
         if (resultsHeader) resultsHeader.textContent = 'Full Recipe:';
         if (featuredHeader) featuredHeader.textContent = 'Full Recipe:';
-
-        // Add close button handler at the bottom of the recipe panel
+  
         const closeButton = fullPanel.querySelector('.close-button');
         if (closeButton) {
-            closeButton.addEventListener('click', () => {
-                fullPanel.style.display = 'none';
-                if (recipeBlock && recipeBlock.style) recipeBlock.style.display = 'block';
-                if (searchBlock && searchBlock.style) searchBlock.style.display = 'block';
-
-                const resultsHeader = document.getElementById('results-header');
-                const featuredHeader = document.getElementById('featured-header');
-
-                if (resultsHeader) resultsHeader.textContent = 'Search Results:';
-                if (featuredHeader) featuredHeader.textContent = 'Featured Recipes';
-            });
+          closeButton.addEventListener('click', () => {
+            fullPanel.style.display = 'none';
+            if (recipeBlock && recipeBlock.style) recipeBlock.style.display = 'block';
+            if (searchBlock && searchBlock.style) searchBlock.style.display = 'block';
+  
+            const resultsHeader = document.getElementById('results-header');
+            const featuredHeader = document.getElementById('featured-header');
+  
+            if (resultsHeader) resultsHeader.textContent = 'Search Results:';
+            if (featuredHeader) featuredHeader.textContent = 'Featured Recipes';
+          });
         }
-        })
-        .catch(err => {
-            console.error("Error loading recipe:", err);
-        });
-}
+      })
+      .catch(err => {
+        console.error("Error loading recipe:", err);
+      });
+  }
+  
 
-document.addEventListener('DOMContentLoaded', function () {
-    if (window.location.pathname.endsWith('siteinfo.html')) {
-        // Load nav and layout
-        const leftCol = document.getElementById('left-column');
-        const rightCol = document.getElementById('right-column');
-        const footer = document.getElementById('footer');
-        const centerCol = document.getElementById('center-column');
-
-        if (leftCol) leftCol.innerHTML = leftnavTemplate;
-        if (rightCol) rightCol.innerHTML = rightcolumnTemplate;
-        if (footer) footer.innerHTML = footerTemplate;
-
-        if (centerCol) {
-            centerCol.innerHTML = `
-                <h2 id="privacy">Privacy Policy</h2>
-                <p>Your privacy is important to us. MyRecipEase does not sell, trade, or rent your personal information to others. We collect only the data necessary to support recipe sharing and user account functionality, such as your username, email address, and saved recipe data.</p>
-
-                <h2 id="terms">Terms of Use</h2>
-                <p>By using MyRecipEase, you agree to use the site responsibly and respectfully. You may not upload offensive content or attempt to access user data not associated with your account. We reserve the right to suspend or delete accounts that violate these terms. MyRecipEase is provided "as-is" without warranties of any kind.</p>
-
-                <h2 id="contact">Contact Us</h2>
-                <p>Email: <a href="mailto:mikeyratf@gmail.com">mikeyratf@gmail.com</a><br>
-                   Phone: (555) 123-4567</p>
-            `;
+function formatIngredients(ingredientsObj) {
+    function combineUnits(units) {
+      const result = {};
+      for (const [unit, count] of Object.entries(units)) {
+        const match = unit.match(/^([1-9]\/[1-9]) (.+)$/); // e.g., '1/2 Cup'
+        if (match) {
+          const fraction = match[1];
+          const baseUnit = match[2];
+          const fracMap = {
+            "1/4": 0.25,
+            "1/3": 0.33,
+            "1/2": 0.5,
+            "3/4": 0.75
+          };
+          const fracValue = fracMap[fraction];
+          if (!fracValue) continue;
+          if (!result[baseUnit]) result[baseUnit] = 0;
+          result[baseUnit] += fracValue * count;
+        } else {
+          if (!result[unit]) result[unit] = 0;
+          result[unit] += count;
         }
+      }
+      return result;
     }
-});
+  
+    function formatQuantity(qty) {
+      const whole = Math.floor(qty);
+      const fraction = +(qty - whole).toFixed(2);
+      const fracMap = {
+        0.25: '1/4',
+        0.33: '1/3',
+        0.34: '1/3',
+        0.5:  '1/2',
+        0.75: '3/4'
+      };
+      const parts = [];
+      if (whole > 0) parts.push(`${whole}`);
+      if (fracMap[fraction]) parts.push(fracMap[fraction]);
+      return parts.join(' + ') || qty.toString();
+    }
+  
+    const output = [];
+    for (const [ingredientName, ingredientData] of Object.entries(ingredientsObj || {})) {
+      const combined = combineUnits(ingredientData.units || {});
+      const parts = [];
+      for (const [unit, qty] of Object.entries(combined)) {
+        parts.push(`${formatQuantity(qty)} ${unit}`);
+      }
+      const line = `${parts.join(' + ').padEnd(20, ' ')} ${ingredientName}`;
+      output.push(line);
+    }
+    return output;
+  }
 
