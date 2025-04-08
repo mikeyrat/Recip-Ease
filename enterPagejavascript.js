@@ -110,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { value: "dessert_ingredients", name: "Desserts" },
             { value: "appetizer_ingredients", name: "Appetizers" },
             { value: "main_course_ingredients", name: "Main Courses" },
+            { value: "sauces_ingredients", name: "Marinades and Sauces" },
         ]
     };
 
@@ -147,6 +148,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     { value: "soups", name: "Soups" },
                     { value: "pork", name: "Pork" },
                     { value: "vegetarian", name: "Vegetarian" }
+                ],
+                sauces: [
+                  { value: "dips", name: "Dips" },
+                  { value: "dressings", name: "Dressings" },
+                  { value: "marinades", name: "Marinades" },
+                  { value: "savory_sauces", name: "Savory Sauces" },
+                  { value: "spreads", name: "Spreads" },
+                  { value: "sweet_sauces", name: "Sweet Sauces" }
                 ]
         };
 
@@ -317,7 +326,7 @@ function loadIngredients(category, type) {
     }
   
     try {
-      const isDivided = document.getElementById('dividedCheckbox')?.checked || false;
+      const isDivided = document.getElementById('divided')?.checked || false;
 
       const response = await fetch(`http://3.84.112.227:3000/api/recipes/${currentRecipeId}/ingredients`, {
         method: 'PUT',
@@ -336,6 +345,7 @@ function loadIngredients(category, type) {
         // alert(`Added ${selectedIngredientName} to recipe.`);
         selectedIngredientName = null;
         selectedIngredientUnits = {};
+        document.getElementById('divided').checked = false;
         document.querySelectorAll('.parsed-ingredients-list li').forEach(li => li.style.backgroundColor = '');
       
         // Refresh list

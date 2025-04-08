@@ -15,11 +15,12 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error('MongoDB connection error:', err));
 
 const db = mongoose.connection; //instantiate our connection as "db"
-const validCollections = ['recipes', 'dessert_ingredients', 'appetizer_ingredients', 'main_course_ingredients', 'users']; // we use this const in several routes
+const validCollections = ['recipes', 'dessert_ingredients', 'appetizer_ingredients', 'main_course_ingredients', 'sauces_ingredients', 'users']; // we use this const in several routes
 const validIngredientCollections = [ // this is just the ingredients collections, used much later
     "dessert_ingredients",
     "appetizer_ingredients",
-    "main_course_ingredients"
+    "main_course_ingredients",
+    "sauces_ingredients"
 ];
 const validUnits = new Set([
   "Cup", "1/2 Cup", "1/4 Cup", "1/3 Cup",
@@ -108,6 +109,11 @@ app.get('/api/recipes/random/:count', async (req, res) => { // route to call ran
 
 app.get('/api/:collectionName', async (req, res) => { //generic route that gets documents from the chosen collection
     try {
+        console.log(">>> Incoming request");
+        console.log("collectionName:", req.params.collectionName);
+        console.log("types:", req.query.types);
+        console.log("validCollections:", validCollections);
+        console.log("validIngredientCollections:", validIngredientCollections);
         const { collectionName } = req.params; // the collectionName is sent as a parameterized variable to prevent outside interference 
         const { types } = req.query; 
 
@@ -128,6 +134,9 @@ app.get('/api/:collectionName', async (req, res) => { //generic route that gets 
 
             return res.json({ collection: collectionName, types: types || null, ingredients });
         }
+
+        console.log("Requested collection:", collectionName);
+        console.log("Valid collections:", validCollections);
 
         if (!validCollections.includes(collectionName)) {
             return res.status(400).json({ error: "Invalid collection name." });

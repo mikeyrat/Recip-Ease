@@ -223,7 +223,8 @@ function formatIngredients(ingredientsObj) {
       for (const [unit, qty] of Object.entries(combined)) {
         parts.push(`${formatQuantity(qty)} ${unit}`);
       }
-      const line = `${parts.join(' + ').padEnd(20, ' ')} ${ingredientName}`;
+      const dividedNote = ingredientData.divided ? " (divided)" : "";
+        const line = `${parts.join(' + ').padEnd(20, ' ')} ${ingredientName}${dividedNote}`;
       output.push(line);
     }
     return output;
