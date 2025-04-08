@@ -22,11 +22,11 @@ const validIngredientCollections = [ // this is just the ingredients collections
     "main_course_ingredients"
 ];
 const validUnits = new Set([
-    "Cup", "1/2 Cup", "1/4 Cup", "1/3 Cup",
-    "TBSP", "1/2 TBSP", "TSP", "1/2 TSP",
-    "Oz.", "Gms.", "Qty", "Other"
-  ]);
-  
+  "Cup", "1/2 Cup", "1/4 Cup", "1/3 Cup",
+  "TBSP", "1/2 TBSP", "TSP", "1/2 TSP",
+  "Oz.", "Gms.", "Qty", "Other"
+]);
+
 
 db.once('open', () => console.log('Connected to MongoDB')); //establist the MongoDB connection
 
@@ -438,7 +438,7 @@ app.put('/api/recipes/:id/ingredients', async (req, res) => { // add or update i
                 return res.status(400).json({ error: `Invalid unit: ${unitKey}. Allowed units are: ${[...validUnits].join(", ")}` });
             }
         }
-
+        const collection = mongoose.connection.collection('recipes');
         // Store it
         const result = await collection.updateOne(
             { _id: docId },
