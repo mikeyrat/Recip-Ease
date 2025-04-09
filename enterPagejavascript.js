@@ -72,21 +72,27 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = "/signin.html"; 
     }
     var buttonData = {
-        buttons: [
-            { label: "Cup" },
-            { label: "1/2<br>Cup" },
-            { label: "1/4<br>Cup" },
-            { label: "1/3<br>Cup" },
-            { label: "TBSP" },
-            { label: "1/2<br>TBSP" },
-            { label: "TSP" },
-            { label: "1/2<br>TSP" },
-            { label: "Oz." },
-            { label: "Gms." },
-            { label: "Qty" },
-            { label: "Other" }
-        ]
-    };
+      buttons: [
+          { label: "Cup" },
+          { label: "1/2<br>Cup" },
+          { label: "1/3<br>Cup" },
+          { label: "1/4<br>Cup" },
+          { label: "TBSP" },
+          { label: "1/2<br>TBSP" },
+          { label: "TSP" },
+          { label: "1/2<br>TSP" },
+          { label: "1/8<br>TSP" },
+          { label: "Oz." },
+          { label: "Lbs." },
+          { label: "Pinch" },
+          { label: "Dash" },
+          { label: "Drop" },
+          { label: "Whole" },
+          { label: "Bunch" },
+          { label: "Qty" },
+          { label: "Other" }
+      ]
+  };
     var buttonGridRendered = Mustache.render(buttonGridTemplate, buttonData);
     document.getElementById('button-grid-placeholder').innerHTML = buttonGridRendered;
     document.querySelectorAll('.button-grid button').forEach(button => {

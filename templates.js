@@ -6,7 +6,9 @@ const navTemplate = `
             <li><a href="/enter.html">Enter</a></li>
             <li><a href="/share.html">Share</a></li>
             <li><a href="/signin.html" id="login-nav-link">Login/Sign Up</a></li>
-            <li><a href="#" id="hide-nav-link" class="recipe-entry">Hide Navigation</a></li>
+            <li id="nav-toggle-wrapper" style="background-color: #b3866f;">
+                <a href="#" id="hide-nav-link">Hide Navigation</a>
+            </li>
         </ul>
     </nav>`;
 
