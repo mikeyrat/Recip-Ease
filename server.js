@@ -23,14 +23,14 @@ const validIngredientCollections = [ // this is just the ingredients collections
     "sauces_ingredients"
 ];
 const validUnits = new Set([
-    "Cup", "1/2 Cup", "1/3 Cup", "1/4 Cup",
-    "TBSP", "1/2 TBSP",
-    "TSP", "1/2 TSP", "1/8 TSP",
-    "Oz.", "Lbs.",
-    "Pinch", "Dash", "Drop",
-    "Whole", "Bunch",
-    "Qty", "Other"
-  ]);
+  "Cup", "1/2 Cup", "1/3 Cup", "1/4 Cup",
+  "TBSP", "1/2 TBSP",
+  "TSP", "1/2 TSP", "1/8 TSP",
+  "Oz.", "Lbs.",
+  "Pinch", "Dash", "Drop",
+  "Whole", "Bunch",
+  "Qty", "Other"
+]);
 
 
 db.once('open', () => console.log('Connected to MongoDB')); //establist the MongoDB connection
