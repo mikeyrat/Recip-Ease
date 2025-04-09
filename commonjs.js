@@ -1,16 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
-
-    // Render Navigation
-    if (document.getElementById('navigation-placeholder')) {
-        document.getElementById('navigation-placeholder').innerHTML = Mustache.render(navTemplate, {});
+    const navPlaceholder = document.getElementById('navigation-placeholder');
+    if (navPlaceholder) {
+        navPlaceholder.innerHTML = Mustache.render(navTemplate, {});
     }
 
-    // Render Footer
-    if (document.getElementById('footer-placeholder')) {
-        document.getElementById('footer-placeholder').innerHTML = Mustache.render(footerTemplate, {});
+    const footerPlaceholder = document.getElementById('footer-placeholder');
+    if (footerPlaceholder) {
+        footerPlaceholder.innerHTML = Mustache.render(footerTemplate, {});
     }
 
-    
+    setupNavToggle(); // 👈 Add this here
 });
 
 function sharedPageInit() {
@@ -47,4 +46,29 @@ function sharedPageInit() {
     } else {
         loginNavLink.textContent = "Click to Sign In";
     }
+}
+
+function setupNavToggle() {
+    const navList = document.querySelector('.navigation ul');
+    const toggleLink = document.getElementById('hide-nav-link');
+
+    if (!navList || !toggleLink) return;
+
+    toggleLink.addEventListener('click', (e) => {
+        e.preventDefault(); // Stop "#" from jumping the page
+
+        const navItems = Array.from(navList.children).filter(
+            li => !li.contains(toggleLink)
+        );
+
+        const isHidden = toggleLink.textContent === 'Show Navigation';
+
+        if (isHidden) {
+            navItems.forEach(li => li.style.display = 'list-item');
+            toggleLink.textContent = 'Hide Navigation';
+        } else {
+            navItems.forEach(li => li.style.display = 'none');
+            toggleLink.textContent = 'Show Navigation';
+        }
+    });
 }

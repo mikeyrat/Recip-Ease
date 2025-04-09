@@ -1072,3 +1072,11 @@ input[type="password"] {
     background-color: #cbe3c0 !important; /* light green */
   }
 
+  .nav-home-style {
+    background-color: #b3866f;
+  }
+  
+  .nav-home-style:hover {
+    background-color: #c19d8a;
+  }
+

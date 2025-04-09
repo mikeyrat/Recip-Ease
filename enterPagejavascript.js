@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 currentRecipeId = result.recipe_id;
                 localStorage.setItem('currentRecipeId', currentRecipeId);
                 localStorage.setItem('currentRecipeBasics', JSON.stringify(recipeData));
-                //alert(`Recipe saved! ID: ${currentRecipeId}`);
+                loadIngredients(recipeData.category, recipeData.type);
             } else {
                 throw new Error(result.error || 'Failed to save recipe');
             }
@@ -221,6 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function loadIngredients(category, type) {
+  if (!currentRecipeId) return;
     const listContainer = document.getElementById('parsedIngredientsList');
     if (!listContainer) return;
   
@@ -293,7 +294,7 @@ function loadIngredients(category, type) {
   }
   
   
-  // Add event listener on both category and type selectors
+  /* Add event listener on both category and type selectors
   document.addEventListener('DOMContentLoaded', () => {
     const categorySelect = document.getElementById('foodCategory');
     const typeSelect = document.getElementById('dishType');
@@ -310,7 +311,7 @@ function loadIngredients(category, type) {
       categorySelect.addEventListener('change', tryLoadIngredients);
       typeSelect.addEventListener('change', tryLoadIngredients);
     }
-  });
+  }); */
   
   document.querySelector('.ingredient-form').addEventListener('submit', async (e) => {
     e.preventDefault();
