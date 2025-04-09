@@ -104,8 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
           const unitLabel = button.innerHTML.replace(/<br\s*\/?>/gi, ' ').trim();
           selectedIngredientUnits[unitLabel] = (selectedIngredientUnits[unitLabel] || 0) + 1;
-      
-          console.log(`Unit selected: ${unitLabel} (${selectedIngredientUnits[unitLabel]})`);
+          updateUnitPreview();
         });
       });
 });
@@ -284,7 +283,7 @@ function loadIngredients(category, type) {
   function selectIngredient(ingredientName) {
     selectedIngredientName = ingredientName;
     selectedIngredientUnits = {}; // reset the unit counts
-  
+    document.getElementById('unit-preview').textContent = '';
     // Highlight the selected ingredient
     document.querySelectorAll('.parsed-ingredients-list li').forEach(li => {
       li.style.backgroundColor = '';
@@ -298,6 +297,39 @@ function loadIngredients(category, type) {
   
     console.log(`Selected: ${ingredientName}`);
   }
+
+  function updateUnitPreview() {
+    const preview = document.getElementById('unit-preview');
+    if (!selectedIngredientName || Object.keys(selectedIngredientUnits).length === 0) {
+      preview.textContent = '';
+      return;
+    }
+  
+    const fakeIngredient = {
+      [selectedIngredientName]: {
+        units: selectedIngredientUnits
+      }
+    };
+  
+    const lines = formatIngredients(fakeIngredient);
+    preview.textContent = lines[0] || '';
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const cancelUnitBtn = document.getElementById('cancel-unit-btn');
+    if (cancelUnitBtn) {
+      cancelUnitBtn.addEventListener('click', () => {
+        selectedIngredientName = null;
+        selectedIngredientUnits = {};
+        document.getElementById('divided').checked = false;
+        document.getElementById('unit-preview').textContent = '';
+  
+        document.querySelectorAll('.parsed-ingredients-list li').forEach(li => {
+          li.style.backgroundColor = '';
+        });
+      });
+    }
+  });
   
   
   /* Add event listener on both category and type selectors
@@ -352,6 +384,7 @@ function loadIngredients(category, type) {
         // alert(`Added ${selectedIngredientName} to recipe.`);
         selectedIngredientName = null;
         selectedIngredientUnits = {};
+        document.getElementById('unit-preview').textContent = '';
         document.getElementById('divided').checked = false;
         document.querySelectorAll('.parsed-ingredients-list li').forEach(li => li.style.backgroundColor = '');
       
@@ -410,6 +443,10 @@ function loadIngredients(category, type) {
       console.error("Error saving instruction:", err);
       alert("Failed to save instruction.");
     }
+  });
+
+  document.getElementById('clear-instruction-btn')?.addEventListener('click', () => {
+    document.getElementById('instructions').value = '';
   });
   
 
