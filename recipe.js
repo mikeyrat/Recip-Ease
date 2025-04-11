@@ -3,8 +3,8 @@
 // Copyright 2024-2025 Michael Forman - All rights reserved.
 
 document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const recipeId = urlParams.get('id');
+    const pathParts = window.location.pathname.split('/');
+    const recipeId = pathParts[pathParts.length - 1] || null;
 
     if (!recipeId) {
         document.getElementById('full-recipe-view').innerHTML = `
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!sharePanel) return;
 
         const baseURL = window.location.origin;
-        const fullURL = `${baseURL}/recipe.html?id=${recipeId}`;
+        const fullURL = `${baseURL}/recipes/${recipeId}`;
 
         document.getElementById('facebook-share').onclick = () => {
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullURL)}`, '_blank');

@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () { // on load
         shareButtons.forEach(button => { // go through the buttons and...
             const recipeId = button.getAttribute('data-id'); // get the recipe ID
             button.addEventListener('click', () => { // set up listeners for the buttons
-                const shareUrl = `recipe.html?id=${recipeId}`; //create the url for the recipe page
+                const shareUrl = `/recipes/${recipeId}`; //create the url for the recipe page
                 window.open(shareUrl, '_blank'); // show the page
             });
         });

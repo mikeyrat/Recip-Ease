@@ -729,3 +729,9 @@ app.delete('/api/recipes/:id', async (req, res) => { //General find and delete a
 app.listen(port, () => { // glad someone is listening... my wife says I never do
     console.log(`Server running on http://localhost:${port}`);
 });
+
+const path = require('path');
+
+app.get('/recipes/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'recipe.html'));
+});
