@@ -1,3 +1,7 @@
+// MyRecipEase.com by Michael Forman
+// Prepared for Maryville University Masters of Programming Capstone Project, Dr. Joseph Gradecki
+// Copyright 2024-2025 Michael Forman - All rights reserved.
+
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const recipeId = urlParams.get('id');

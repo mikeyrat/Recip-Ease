@@ -1031,7 +1031,7 @@ input[type="password"] {
 #entered-ingredients {
     padding: 0;
     margin: 0;
-  }
+  } 
 
 .parsed-ingredients-list, .entered-ingredients-list {
     width: 100%;
@@ -1205,3 +1205,23 @@ input[type="password"] {
     height: auto;       /* prevents unexpected large height */
     line-height: 1.2;   /* tighter text line spacing */
 }
+
+.hidden {
+    display: none !important;
+  }
+
+  .inline-delete-btn {
+    margin-left: 8px;
+    background-color: #e57373;
+    color: white;
+    font-size: 12px;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    font-family: "Rockwell", monospace;
+    cursor: pointer;
+  }
+  
+  .inline-delete-btn:hover {
+    background-color: #c62828;
+  }

@@ -20,7 +20,7 @@
 			<div id="button-grid-placeholder"></div>
 			<form class="ingredient-form">
 				<div class="ingredient-control-wrapper">
-					<div id="unit-preview-row" class="ingredient-preview-row">
+					<div id="unit-preview-row" class="ingredient-preview-row hidden">
 						<div id="unit-preview" class="ingredient-preview-box"></div>
 						<button type="submit">Add</button>
 					</div>
@@ -72,19 +72,22 @@
 					</div>
 				  </form>
 			</div>
-			<div class="parsed-ingredients-list" id="parsedIngredientsList">
+			<div class="parsed-ingredients-list" id="parsedIngredientsList" style="display: none">
 				<!-- Ingredient list gets inserted here -->
 			  </div>
-			  <h2>Entered Ingredients</h2>
-			  <div id="entered-ingredients" class="entered-ingredients-list"></div><br>
-			  <form class="instructions-form">
+			  
+				<h2>Entered Ingredients</h2>
+				<div id="entered-ingredients" class="entered-ingredients-list"></div>
+			  
+			  <br>
+			  <form class="instructions-form" id="instructions-form" style="display: none">
 				<textarea id="instructions" name="instructions" placeholder="Enter instructions for each step"></textarea>
 				<div class="instruction-buttons">
 					<button type="submit" class="recipe-entry">Submit Step</button>
 					<button type="button" class="recipe-entry" id="clear-instruction-btn">Cancel</button>
 				</div>
 			</form>
-				<div id="entered-instructions" class="entered-ingredients-list"></div>
+				<div id="entered-instructions" class="entered-ingredients-list" style="display: none"></div>
 				<div class="closeout-buttons">
 					<button id="cancel-button" type="button">Clear Form</button>
 					<button id="saveRecipeBtn" type="button">Save Recipe</button>

@@ -1,3 +1,9 @@
+// MyRecipEase.com by Michael Forman
+// Prepared for Maryville University Masters of Programming Capstone Project, Dr. Joseph Gradecki
+// Copyright 2024-2025 Michael Forman - All rights reserved.
+
+//This page is largely the same as the share.js, in fact it was originally a copy. The difference is in making different buttons for the display
+
 document.addEventListener('DOMContentLoaded', function () { // loading document do this
     const resultsContainer = document.getElementById('search-results-placeholder'); //create container for results
 
@@ -14,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () { // loading document 
         });
     }
 
-    document.getElementById('search-form').addEventListener('submit', async function (e) {
+    document.getElementById('search-form').addEventListener('submit', async function (e) { // search textbox submit handler
         e.preventDefault();
         const query = document.getElementById('searchInput').value.trim();
         if (!query) return;
@@ -33,6 +39,29 @@ document.addEventListener('DOMContentLoaded', function () { // loading document 
             renderRecipes(recipes);
         } catch (err) {
             resultsContainer.innerHTML = `<p class="ui-message error">No recipes found or error occurred.</p>`;
+        }
+    });
+
+    document.getElementById('showMyBtn').addEventListener('click', async function () {  // same call except for button differences
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            alert("You must be logged in to see your recipes.");
+            return;
+        }
+    
+        try {
+            const response = await fetch('http://3.84.112.227:3000/api/recipes');
+            const data = await response.json();
+            const recipes = Array.isArray(data) ? data : data.recipes;
+    
+            const myRecipes = recipes.filter(recipe => recipe.user_id === parseInt(userId));
+            if (myRecipes.length === 0) {
+                resultsContainer.innerHTML = `<p class="ui-message info">You haven't entered any recipes yet.</p>`;
+            } else {
+                renderRecipes(myRecipes);
+            }
+        } catch (err) {
+            resultsContainer.innerHTML = `<p class="ui-message error">Failed to load your recipes.</p>`;
         }
     });
 
