@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () { // on load
     }
 
     document.getElementById('showMyBtn').addEventListener('click', async function () { // Functionality for "Show My Recipes" button
-        const userId = localStorage.getItem('userId');n // grab the user ID from localStorage
+        const userId = localStorage.getItem('userId'); // grab the user ID from localStorage
         if (!userId) { // no userID? Not logged in.
             alert("You must be logged in to see your recipes."); // sorry chump
             return;
@@ -79,5 +79,5 @@ document.addEventListener('DOMContentLoaded', function () { // on load
 
     document.getElementById('showAllBtn').addEventListener('click', fetchAllRecipes); // document listener for show all button.
 
-    fetchAllRecipes();  // calls all recipes for showAllBtn
+
 });
