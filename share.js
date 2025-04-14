@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () { // on load
     });
 
     document.getElementById('search-form').addEventListener('submit', async function (e) { // submit button for search text box
-        e.preventDefault();// wave off listener if cancelled
+        e.preventDefault();// javascript got this, so away browser
         const query = document.getElementById('searchInput').value.trim(); // get textbox data
         if (!query) return; // nothing there, then back you go
 
@@ -79,5 +79,5 @@ document.addEventListener('DOMContentLoaded', function () { // on load
 
     document.getElementById('showAllBtn').addEventListener('click', fetchAllRecipes); // document listener for show all button.
 
-    fetchAllRecipes();  // why is it here? this is where it worked on testing , so moving on
+    fetchAllRecipes();  // calls all recipes for showAllBtn
 });

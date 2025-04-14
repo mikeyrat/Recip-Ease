@@ -1046,7 +1046,7 @@ input[type="password"] {
     line-height: 1.2;
     margin: 10px auto;
     font-weight: bold;
-    white-space: pre;
+    white-space: pre-wrap;
   }
   
   .parsed-ingredients-list ul {
@@ -1146,8 +1146,8 @@ input[type="password"] {
 .ingredient-control-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 4px;                /* Tight space between preview/cancel and divided/add rows */
-    margin-top: 4px;         /* Less space from button grid above */
+    gap: 4px;                
+    margin-top: 4px;       
 }
 
 .ingredient-preview-row {
@@ -1162,7 +1162,7 @@ input[type="password"] {
     color: #634535;
     background-color: #fff3dc;
     border: 1px solid #c3a97f;
-    padding: 3px 6px;         /* slightly tighter padding */
+    padding: 3px 6px;         
     flex-grow: 1;
     min-height: 18px;
     text-align: center;
@@ -1171,7 +1171,7 @@ input[type="password"] {
 .preview-cancel-button {
     font-family: "Rockwell", monospace;
     font-size: 13px;
-    padding: 3px 8px;         /* slightly smaller button */
+    padding: 3px 8px;        
     background-color: #f5e2c4;
     border: 1px solid #c3a97f;
     color: #634535;
@@ -1195,15 +1195,15 @@ input[type="password"] {
 }
 
 #button-grid-placeholder {
-    margin-bottom: 4px;  /* Reduce from default or remove entirely */
+    margin-bottom: 4px;  
     padding-bottom: 0;
   }
 
 .enter-page .instruction-buttons .recipe-entry {
     padding: 6px 10px;
     font-size: 15px;
-    height: auto;       /* prevents unexpected large height */
-    line-height: 1.2;   /* tighter text line spacing */
+    height: auto;       
+    line-height: 1.2;   
 }
 
 .hidden {
@@ -1225,3 +1225,25 @@ input[type="password"] {
   .inline-delete-btn:hover {
     background-color: #c62828;
   }
+
+  #entered-instructions {
+    white-space: pre-wrap;       
+    word-wrap: break-word;      
+    overflow-x: hidden;          
+    max-width: 100%;            
+}
+
+#entered-instructions ol {
+    padding-left: 1.5em;
+    margin: 0;
+    font-family: "Rockwell", monospace;
+    font-size: 14px;
+    color: #634535;
+    line-height: 1.4;
+}
+
+#entered-instructions li {
+    margin-bottom: 6px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}

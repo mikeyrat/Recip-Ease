@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function () { // if no recipe, the
     const recipeForm = document.getElementById('recipeForm');
 
     recipeForm.addEventListener('submit', async function (e) { // when "Save Recipe Information" clicked do this listener
-        e.preventDefault();
+        e.preventDefault(); // Whatever the browser would do here, NO! I'll handle it with JavaScript (XSS prevention)
         const recipeData = { // take the data from the form for the following
             name: document.getElementById('recipeName').value.trim(),
             category: document.getElementById('foodCategory').value.trim(),
@@ -347,7 +347,7 @@ function loadIngredients(category, type) { // function to load ingredients
   });  */
   
   document.querySelector('.ingredient-form').addEventListener('submit', async (e) => { // "OK" button after selecting ingredient and quantity(s)
-    e.preventDefault(); // cancel? send event
+    e.preventDefault(); // Browser, no default action, javascript got this
     if (!selectedIngredientName || Object.keys(selectedIngredientUnits).length === 0) { // if neither ingredients or quantity fie on you
       alert("Please select an ingredient and at least one unit.");
       return; // fix it plz
@@ -407,7 +407,7 @@ function loadIngredients(category, type) { // function to load ingredients
   });
 
   document.querySelector('.instructions-form').addEventListener('submit', async (e) => { // listener to see if user has clicked the "Save Instruction Step" button
-    e.preventDefault(); // catch cancelled actions
+    e.preventDefault(); // chill browser, javascript is in charge
   
     const textarea = document.getElementById('instructions'); // read text area
     const stepText = textarea.value.trim(); // trim it
@@ -542,7 +542,7 @@ function loadIngredients(category, type) { // function to load ingredients
         });
   
         deleteBtn.addEventListener('click', async (e) => {
-          e.stopPropagation();
+          e.stopPropagation(); // not today browser, stay on task with this
   
           try {
             const result = await fetch(`http://3.84.112.227:3000/api/recipes/${recipeId}/instructions`, { // delete this insruction and go on

@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () { // loading document 
     }
 
     document.getElementById('search-form').addEventListener('submit', async function (e) { // search textbox submit handler
-        e.preventDefault();
+        e.preventDefault(); // actions go to javascript
         const query = document.getElementById('searchInput').value.trim();
         if (!query) return;
 
