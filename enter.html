@@ -75,8 +75,13 @@
 			<div class="parsed-ingredients-list" id="parsedIngredientsList" style="display: none">
 				<!-- Ingredient list gets inserted here -->
 			  </div>
-			  
-				<h2>Entered Ingredients</h2>
+			  <form id="ingredientSearchForm">
+				<input id="ingredientSearchInput" type="text" placeholder="Search all ingredients..." autocomplete="off" />
+				<button type="submit" id="ingredientSearchBtn">Search</button>
+			  </form>
+			  <ul id="ingredientSearchResults" class="ingredient-search-results"></ul>
+  
+				<h3>Entered Ingredients</h3>
 				<div id="entered-ingredients" class="entered-ingredients-list"></div>
 			  
 			  <br>

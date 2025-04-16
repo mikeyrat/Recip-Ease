@@ -312,6 +312,14 @@ function loadIngredients(category, type) { // function to load ingredients
     preview.textContent = lines[0] || ''; // we have text or we show nothing
   }
 
+  function clearIngredientSearchResults() {
+    const resultsContainer = document.getElementById('ingredientSearchResults');
+    if (resultsContainer) {
+      resultsContainer.innerHTML = '';
+      resultsContainer.style.display = 'none';  // 👈 Hides it when cleared
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function () { // cancel button listener if the user selects an ingredient and quantity and wants to cancel
     const cancelUnitBtn = document.getElementById('cancel-unit-btn'); // get the button
     if (cancelUnitBtn) {
@@ -320,7 +328,7 @@ function loadIngredients(category, type) { // function to load ingredients
         selectedIngredientUnits = {};
         document.getElementById('divided').checked = false;
         document.getElementById('unit-preview').textContent = '';
-  
+        clearIngredientSearchResults();
         document.querySelectorAll('.parsed-ingredients-list li').forEach(li => {
           li.style.backgroundColor = ''; // go back to the ingredient list and turn the selected ingredient background from greenish to white
         });
@@ -328,7 +336,7 @@ function loadIngredients(category, type) { // function to load ingredients
     }
   });
 
-  /*document.addEventListener('DOMContentLoaded', () => { // pretty sure this DOM loader is superflous now. It was an early attempt
+  document.addEventListener('DOMContentLoaded', () => { // pretty sure this DOM loader is superflous now. It was an early attempt
     const categorySelect = document.getElementById('foodCategory');
     const typeSelect = document.getElementById('dishType');
   
@@ -339,12 +347,12 @@ function loadIngredients(category, type) { // function to load ingredients
         loadIngredients(category, type);
       }
     }
-  
+
     if (categorySelect && typeSelect) {
       categorySelect.addEventListener('change', tryLoadIngredients);
       typeSelect.addEventListener('change', tryLoadIngredients);
     }
-  });  */
+  });  
   
   document.querySelector('.ingredient-form').addEventListener('submit', async (e) => { // "OK" button after selecting ingredient and quantity(s)
     e.preventDefault(); // Browser, no default action, javascript got this
@@ -380,6 +388,7 @@ function loadIngredients(category, type) { // function to load ingredients
         selectedIngredientUnits = {};
         document.getElementById('unit-preview').textContent = ''; // clear preview box
         document.getElementById('divided').checked = false; // clear checked
+        clearIngredientSearchResults();
         document.querySelectorAll('.parsed-ingredients-list li').forEach(li => li.style.backgroundColor = ''); // make sure no ingredients indicate selected
         const instructionForm = document.getElementById('instructions-form');
         if (instructionForm && instructionForm.style.display === 'none') { // only display parts of the instructions if form is visible
@@ -681,6 +690,83 @@ function loadIngredients(category, type) { // function to load ingredients
       alert("An error occurred while deleting the recipe.");
     }
   });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('ingredientSearchInput');
+    const searchBtn = document.getElementById('ingredientSearchBtn');
+    const resultsContainer = document.getElementById('ingredientSearchResults');
+    searchInput.value = '';
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();       // prevent default form behavior
+        searchBtn.click();        // trigger the same search
+      }
+    });
+  
+    const searchForm = document.getElementById('ingredientSearchForm');
+    searchForm.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Stop form from actually submitting
+    
+      const query = searchInput.value.trim().toLowerCase();
+      resultsContainer.innerHTML = '';
+      resultsContainer.style.display = 'none';
+    
+      if (!query) return;
+    
+      const collections = ['dessert_ingredients', 'appetizer_ingredients', 'main_course_ingredients', 'sauces_ingredients'];
+      const allMatches = [];
+    
+      for (const collection of collections) {
+        try {
+          const response = await fetch(`http://3.84.112.227:3000/api/${collection}`);
+          const data = await response.json();
+          const matches = data.ingredients?.filter(item =>
+            item.ingredient?.toLowerCase().includes(query)
+          ).map(item => ({ name: item.ingredient, collection })) || [];
+    
+          allMatches.push(...matches);
+        } catch (err) {
+          console.error(`Error searching ${collection}:`, err);
+        }
+      }
+    
+      if (allMatches.length === 0) {
+        resultsContainer.innerHTML = '<li>No matching ingredients found.</li>';
+        resultsContainer.style.display = 'block';
+        return;
+      }
+    
+      resultsContainer.innerHTML = '';
+      resultsContainer.style.display = 'block';
+    
+      allMatches.forEach(({ name }) => {
+        const li = document.createElement('li');
+    
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'ingredient-name';
+        nameSpan.textContent = name;
+    
+        const actionsSpan = document.createElement('span');
+        actionsSpan.className = 'ingredient-actions';
+    
+        li.appendChild(nameSpan);
+        li.appendChild(actionsSpan);
+    
+        li.title = 'Click to add quantity';
+        li.addEventListener('click', () => {
+          selectIngredient(name);
+          document.getElementById('unit-preview-row')?.classList.remove('hidden');
+        });
+    
+        resultsContainer.appendChild(li);
+      });
+    
+      searchInput.value = ''; // ✅ Clears input after search
+    });
+    
+  });
+  
+  
   
   function showElementById(id) { // used to show hidden elements when needed. I like the UI to look clean when no recipe has been started
     const el = document.getElementById(id);

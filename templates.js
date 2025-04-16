@@ -3,7 +3,8 @@ const navTemplate = `
         <ul>
             <li><a href="/index.html">Home</a></li>
             <li><a href="/search.html">Search</a></li>
-            <li><a href="/enter.html">Enter</a></li>
+            <li><a href="/enter.html">Create Recipes</a></li>
+            <li><a href="/help.html">Help</a></li>
             <li><a href="/share.html">Share</a></li>
             <li><a href="/signin.html" id="login-nav-link">Login/Sign Up</a></li>
             <li id="nav-toggle-wrapper" style="background-color: #b3866f;">
