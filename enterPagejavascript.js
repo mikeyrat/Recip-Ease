@@ -110,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function() { // frankly, we probs 
 document.addEventListener('DOMContentLoaded', function() { // this was originally first, but we needed to see if there was a saved recipe first hence the first loader
     var categoryData = { // categories for ingredients value is actually collection name
         categories: [
+            { value: "breadsrolls_ingredients", name: "Baked Goods (breads, rolls, etc.)" },
             { value: "dessert_ingredients", name: "Desserts" },
             { value: "appetizer_ingredients", name: "Appetizers" },
             { value: "main_course_ingredients", name: "Main Courses" },
@@ -131,6 +132,14 @@ document.addEventListener('DOMContentLoaded', function() { // this was originall
              var normalized = category.replace('_ingredients', '').replace('main_course', 'maincourses'); // strip "_ingredients" because I changed collection names after I did the following code
 
             var dishes = {
+              breadsrolls: [
+                    { value: "dough", name: "Dough" },
+                    { value: "breads", name: "Breads" },
+                    { value: "rolls", name: "Rolls" },
+                    { value: "pastries", name: "Pastries" },
+                    { value: "sweetgoods", name: "Sweet Goods (Donuts, Muffins, Danish, etc.)" },
+                    { value: "misc", name: "Miscellaneous (tortillas, flatbreads" }
+                ],
                 dessert: [
                     { value: "cake", name: "Cake" },
                     { value: "pie", name: "Pie" },

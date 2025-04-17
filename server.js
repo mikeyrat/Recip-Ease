@@ -15,8 +15,9 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error('MongoDB connection error:', err));
 
 const db = mongoose.connection; //instantiate our connection as "db"
-const validCollections = ['recipes', 'dessert_ingredients', 'appetizer_ingredients', 'main_course_ingredients', 'sauces_ingredients', 'users']; // we use this const in several routes
+const validCollections = ['recipes', 'breadsrolls_ingredients', 'dessert_ingredients', 'appetizer_ingredients', 'main_course_ingredients', 'sauces_ingredients', 'users']; // we use this const in several routes
 const validIngredientCollections = [ // this is just the ingredients collections, used much later
+    "breadsrolls_ingredients",
     "dessert_ingredients",
     "appetizer_ingredients",
     "main_course_ingredients",
