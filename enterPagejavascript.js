@@ -111,9 +111,10 @@ document.addEventListener('DOMContentLoaded', function() { // this was originall
     var categoryData = { // categories for ingredients value is actually collection name
         categories: [
             { value: "breadsrolls_ingredients", name: "Baked Goods (breads, rolls, etc.)" },
-            { value: "dessert_ingredients", name: "Desserts" },
             { value: "appetizer_ingredients", name: "Appetizers" },
+            { value: "sides_ingredients", name: "Sides and Veggies" },
             { value: "main_course_ingredients", name: "Main Courses" },
+            { value: "dessert_ingredients", name: "Desserts" },
             { value: "sauces_ingredients", name: "Marinades and Sauces" },
         ]
     };
@@ -140,18 +141,18 @@ document.addEventListener('DOMContentLoaded', function() { // this was originall
                     { value: "sweetgoods", name: "Sweet Goods (Donuts, Muffins, Danish, etc.)" },
                     { value: "misc", name: "Miscellaneous (tortillas, flatbreads" }
                 ],
-                dessert: [
-                    { value: "cake", name: "Cake" },
-                    { value: "pie", name: "Pie" },
-                    { value: "pudding", name: "Pudding" },
-                    { value: "icecream", name: "Ice Cream" },
-                    { value: "cookies", name: "Cookies" },
-                    { value: "sweetbreads", name: "Sweet Breads" }
-                ],
                 appetizer: [
                     { value: "fingerfoods", name: "Finger Foods" },
                     { value: "dips", name: "Dips & Spreads" },
                     { value: "wings", name: "Wings & Things" }
+                ],
+                sides: [
+                    { value: "salads", name: "Salads" },
+                    { value: "coldsides", name: "Cold Sides" },
+                    { value: "hotsides", name: "Hot Sides" },
+                    { value: "vegetables", name: "Vegetables" },
+                    { value: "picnic", name: "Picnics and Bar-B-Que Sides" },
+                    { value: "international", name: "International Sides" }
                 ],
                 maincourses: [
                     { value: "beef", name: "Beef" },
@@ -160,6 +161,14 @@ document.addEventListener('DOMContentLoaded', function() { // this was originall
                     { value: "soups", name: "Soups" },
                     { value: "pork", name: "Pork" },
                     { value: "vegetarian", name: "Vegetarian" }
+                ],
+                dessert: [
+                    { value: "cake", name: "Cake" },
+                    { value: "pie", name: "Pie" },
+                    { value: "pudding", name: "Pudding" },
+                    { value: "icecream", name: "Ice Cream" },
+                    { value: "cookies", name: "Cookies" },
+                    { value: "sweetbreads", name: "Sweet Breads" }
                 ],
                 sauces: [
                   { value: "dips", name: "Dips" },
