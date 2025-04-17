@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() { // this was originall
             { value: "sides_ingredients", name: "Sides and Veggies" },
             { value: "main_course_ingredients", name: "Main Courses" },
             { value: "dessert_ingredients", name: "Desserts" },
-            { value: "sauces_ingredients", name: "Marinades and Sauces" },
+            { value: "sauces_ingredients", name: "Marinades and Sauces" }
         ]
     };
 
