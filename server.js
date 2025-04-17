@@ -22,7 +22,7 @@ const validIngredientCollections = [ // this is just the ingredients collections
     "appetizer_ingredients",
     "main_course_ingredients",
     "sauces_ingredients",
-    "sides_indredients"
+    "sides_ingredients"
 ];
 const validUnits = new Set([
   "Cup", "1/2 Cup", "1/3 Cup", "1/4 Cup",
