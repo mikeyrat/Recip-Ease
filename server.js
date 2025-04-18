@@ -101,9 +101,11 @@ app.get('/api/recipes/random/:count', async (req, res) => { // route to call ran
             return res.status(404).json({ error: "No recipes found." });
         }
 		
-        const randomRecipes = await collection.aggregate([ // grab all the recipes, and randomly select 'count" of them
-            { $sample: { size: Math.min(count, totalRecipes) } },
-            { $project: { _id: 1, name: 1, image: 1, description: 1 } } // only looking for these fields, though for the slideshow or features
+        const recentRecipes = await collection.aggregate([
+            { $sort: { _id: -1 } },             // Sort newest first
+            { $limit: 50 },                     // Take top 50 newest
+            { $sample: { size: count } },       // Randomly select from those
+            { $project: { _id: 1, name: 1, image: 1, description: 1 } }
         ]).toArray();
 
         res.json(randomRecipes);

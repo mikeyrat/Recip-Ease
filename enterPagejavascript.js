@@ -8,6 +8,15 @@ let currentUserId = null; // clear these variables before we begin
 let selectedIngredientName = null;
 let selectedIngredientUnits = {};
 
+const validIngredientCollections = [
+  "breadsrolls_ingredients",
+  "dessert_ingredients",
+  "appetizer_ingredients",
+  "main_course_ingredients",
+  "sauces_ingredients",
+  "sides_ingredients"
+];
+
 document.addEventListener('DOMContentLoaded', function () { // this page has a key for that has to load properly, including database calls so timing is important as I learned the hard way
   setTimeout(() => { // Wait a short moment for the dropdown template to finish rendering - This page has a number of timing waits for things to fill, etc
     const savedRecipeId = localStorage.getItem('currentRecipeId'); // retrieve the recipe id if one is started on refresh or nav away and back
@@ -47,9 +56,9 @@ document.addEventListener('DOMContentLoaded', function () { // this page has a k
         renderEnteredIngredients(currentRecipeId).then(addedIngredients => {
           document.querySelectorAll('.parsed-ingredients-list li').forEach(li => { // one of my favorite cool things is to remove used ingredients from the suggestion list
             const text = li.textContent.trim().toLowerCase();
-            addedIngredients.forEach(name => { // look for each ingredient already used inthe recipe
-              if (text.includes(name.toLowerCase())) { // match?
-                li.remove(); // remove it from the display
+            addedIngredients.forEach(name => {
+              if (text.trim().toLowerCase() === name.trim().toLowerCase()) {
+                li.remove();
               }
             });
           });
@@ -731,7 +740,7 @@ function loadIngredients(category, type) { // function to load ingredients
     
       if (!query) return;
     
-      const collections = ['dessert_ingredients', 'appetizer_ingredients', 'main_course_ingredients', 'sauces_ingredients'];
+      const collections = [...validIngredientCollections];
       const allMatches = [];
     
       for (const collection of collections) {
