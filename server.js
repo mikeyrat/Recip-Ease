@@ -108,7 +108,7 @@ app.get('/api/recipes/random/:count', async (req, res) => { // route to call ran
             { $project: { _id: 1, name: 1, image: 1, description: 1 } }
         ]).toArray();
 
-        res.json(randomRecipes);
+        res.json(recentRecipes);
     } catch (err) {
         console.error("Error fetching random recipes:", err);
         res.status(500).json({ error: err.message });
