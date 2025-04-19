@@ -67,9 +67,14 @@
 					  </div>
 					</div>
 				  
-					<div class="form-row">
-					  <button class="recipe-entry" type="submit">Save Recipe Information</button>
-					</div>
+					<div class="form-row recipe-save-row">
+						<button class="recipe-entry" type="submit" id="saveRecipeInfoBtn">Save Recipe Information</button>
+					  
+						<div id="sortToggle">
+						  <label><input type="radio" name="sortMethod" value="common" checked> Common</label>
+						  <label><input type="radio" name="sortMethod" value="alpha"> Alphabetic</label>
+						</div>
+					  </div>
 				  </form>
 			</div>
 			<div class="parsed-ingredients-list" id="parsedIngredientsList" style="display: none">

@@ -7,6 +7,7 @@
 let currentUserId = null; // clear these variables before we begin
 let selectedIngredientName = null;
 let selectedIngredientUnits = {};
+let ingredientSortMethod = "common";
 
 const validIngredientCollections = [
   "breadsrolls_ingredients",
@@ -78,25 +79,34 @@ document.addEventListener('DOMContentLoaded', function() { // frankly, we probs 
         alert("You must be signed in to create a recipe."); // sorry dude, sign in first. Box takes you to sign in page
         window.location.href = "/signin.html"; 
     }
+    document.querySelectorAll('input[name="sortMethod"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        ingredientSortMethod = radio.value;
+        const category = document.getElementById('foodCategory')?.value;
+        const type = document.getElementById('dishType')?.value;
+        if (category && type) loadIngredients(category, type);
+      });
+    });
+
     var buttonData = { // data for our quantity buttons for feeding template
       buttons: [
-          { label: "Cup" },
-          { label: "1/2<br>Cup" },
-          { label: "1/3<br>Cup" },
-          { label: "1/4<br>Cup" },
           { label: "TBSP" },
-          { label: "1/2<br>TBSP" },
-          { label: "TSP" },
-          { label: "1/2<br>TSP" },
-          { label: "1/8<br>TSP" },
+		      { label: "TSP" },
+		      { label: "Cup" },
+		      { label: "1/2<br>TBSP" },
+		      { label: "1/2<br>TSP" },
+          { label: "1/2<br>Cup" },
+		      { label: "Qty" },
+		      { label: "1/4<br>TSP" },
+		      { label: "1/4<br>Cup" },
+		      { label: "Oz." },
+		      { label: "1/8<BR>TSP" },
+          { label: "1/3<br>Cup" },
           { label: "Oz." },
           { label: "Lbs." },
-          { label: "Pinch" },
           { label: "Dash" },
-          { label: "Drop" },
           { label: "Whole" },
           { label: "Bunch" },
-          { label: "Qty" },
           { label: "Other" }
       ]
   };
@@ -240,6 +250,7 @@ document.addEventListener('DOMContentLoaded', function () { // if no recipe, the
                 localStorage.setItem('currentRecipeBasics', JSON.stringify(recipeData)); // Store the saved recipe data up to this point. 
                 loadIngredients(recipeData.category, recipeData.type);
                 handleRecipeBasicsSaved(); // "recipeData" will be built up on as the user adds ingredients and instructions. It is the main recipes payload for this recipe
+                document.getElementById('sortToggle').style.display = 'inline-block';
             } else {                       
                 throw new Error(result.error || 'Failed to save recipe');
             }
@@ -269,8 +280,12 @@ function loadIngredients(category, type) { // function to load ingredients
         }
   
         // Sort by usage_count descending
-        const sortedIngredients = data.ingredients.sort((a, b) => (b.usage_count || 0) - (a.usage_count || 0)); // Gotta sort by usage_count
-                                                                                                // to make sure most common ingredients are at the top
+        const sortedIngredients = data.ingredients.sort((a, b) => {
+          if (ingredientSortMethod === 'alpha') {
+            return a.ingredient.localeCompare(b.ingredient);
+          }
+          return (b.usage_count || 0) - (a.usage_count || 0); // default
+        });
         const ul = document.createElement('ul'); // creating clickable listing here
         sortedIngredients.forEach(item => {
             const li = document.createElement('li'); // making them so
